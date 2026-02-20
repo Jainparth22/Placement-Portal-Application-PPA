@@ -16,3 +16,18 @@ ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx'}
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
+# register student
+@student_bp.route('/api/students/register', methods=['POST'])
+def register_student():
+    data = request.json
+    if not data:
+        return jsonify({'error': 'No data provided'}), 400
+
+    email = data.get('email', '').strip()
+    password = data.get('password', '').strip()
+    full_name = data.get('full_name', '').strip()
+
+    if not all([email, password, full_name]):
+        return jsonify({'error': 'Email, password, and full name are required'}), 400
+
