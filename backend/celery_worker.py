@@ -16,3 +16,18 @@ celery.conf.update(
     enable_utc=True,
     beat_schedule={
         'daily-reminders': {
+            'task': 'tasks.send_daily_reminders',
+            'schedule': 86400,      # Every 24 hours
+        },
+        'monthly-report': {
+            'task': 'tasks.generate_monthly_report',
+            'schedule': 2592000,    # Every 30 days
+        },
+    },
+)
+
+
+def init_celery(app):
+    # set up celery to use flask app context
+    celery.conf.update(
+        broker_url=app.config.get('CELERY_BROKER_URL', 'redis://localhost:6379/1'),

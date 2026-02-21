@@ -31,3 +31,10 @@ def register_student():
     if not all([email, password, full_name]):
         return jsonify({'error': 'Email, password, and full name are required'}), 400
 
+    # validate inputs
+    if not validate_email(email):
+        return jsonify({'error': 'Please enter a valid email address'}), 400
+    ok, err = validate_password(password)
+    if not ok:
+        return jsonify({'error': err}), 400
+    ok, err = validate_name(full_name, 'Full name')
