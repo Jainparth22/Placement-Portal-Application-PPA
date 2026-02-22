@@ -38,3 +38,14 @@ def register_student():
     if not ok:
         return jsonify({'error': err}), 400
     ok, err = validate_name(full_name, 'Full name')
+    if not ok:
+        return jsonify({'error': err}), 400
+    ok, err = validate_phone(data.get('phone', ''))
+    if not ok:
+        return jsonify({'error': err}), 400
+    if data.get('cgpa'):
+        ok, err = validate_cgpa(data['cgpa'])
+        if not ok:
+            return jsonify({'error': err}), 400
+    if data.get('graduation_year'):
+        ok, err = validate_year(data['graduation_year'])

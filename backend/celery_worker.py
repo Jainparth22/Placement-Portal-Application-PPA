@@ -31,3 +31,19 @@ def init_celery(app):
     # set up celery to use flask app context
     celery.conf.update(
         broker_url=app.config.get('CELERY_BROKER_URL', 'redis://localhost:6379/1'),
+        result_backend=app.config.get('CELERY_RESULT_BACKEND', 'redis://localhost:6379/1'),
+    )
+
+    class ContextTask(celery.Task):
+        abstract = True
+
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return self.run(*args, **kwargs)
+
+    celery.Task = ContextTask
+    return celery
+
+
+# When running as celery worker (not via Flask), create the app context
+# This ensures tasks can access db.session, current_app, etc.
