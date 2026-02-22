@@ -46,3 +46,10 @@ def create_app():
         os.makedirs('instance', exist_ok=True)
         os.makedirs('exports', exist_ok=True)
         os.makedirs('reports', exist_ok=True)
+
+        db.create_all()
+
+        # Create admin user if not exists
+        admin = User.query.filter_by(role='admin').first()
+        if not admin:
+            admin = User(

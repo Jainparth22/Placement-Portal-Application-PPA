@@ -18,3 +18,10 @@ The **Placement Portal Application (PPA)** is a multi-role web application that 
 
 **Three roles, one platform:**
 - 🔵 **Admin** — Approves companies & drives, manages students, views analytics, generates reports
+- 🟢 **Company / HR** — Registers, creates placement drives, manages applicants, schedules interviews
+- 🟡 **Student** — Browses approved drives, applies, tracks status, checks ATS resume score, exports history
+
+---
+
+## ✨ Features
+

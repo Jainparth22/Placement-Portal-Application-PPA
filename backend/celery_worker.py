@@ -47,3 +47,8 @@ def init_celery(app):
 
 # When running as celery worker (not via Flask), create the app context
 # This ensures tasks can access db.session, current_app, etc.
+try:
+    from app import create_app
+    _flask_app = create_app()
+    init_celery(_flask_app)
+except Exception:
