@@ -25,3 +25,23 @@ The **Placement Portal Application (PPA)** is a multi-role web application that 
 
 ## ✨ Features
 
+### 🔐 Authentication
+- JWT token-based authentication (custom implementation using PyJWT)
+- Role-based access control: `admin`, `company`, `student`
+- Account deactivation and blacklisting by admin
+- Secure password hashing with Werkzeug
+
+> **Note on Flask-Security:** Flask-Security was evaluated during development. A custom JWT implementation (`auth.py`) was chosen instead to allow full control over token payload structure, role-based decorator logic, and user blacklist checks at the token-decode level — behaviours that required deeper integration than Flask-Security's out-of-the-box flow supports cleanly. The implementation follows the same security principles (token expiry, role enforcement, authenticated routes).
+
+### 👩‍💼 Admin
+- Dashboard with real-time stats and Chart.js visualisations (application breakdown, drive status)
+- Approve / reject company registrations with notification
+- Approve / reject / close placement drives
+- Activate, deactivate, or blacklist students and companies
+- Global search across students and companies
+- View all applications with filters (by drive, by status)
+- Trigger monthly placement reports (async via Celery)
+- Download reports as HTML or PDF
+
+### 🏢 Company / HR
+- Self-registration (pending admin approval)
