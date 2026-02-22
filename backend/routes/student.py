@@ -49,3 +49,17 @@ def register_student():
             return jsonify({'error': err}), 400
     if data.get('graduation_year'):
         ok, err = validate_year(data['graduation_year'])
+        if not ok:
+            return jsonify({'error': err}), 400
+
+    if User.query.filter_by(email=email).first():
+        return jsonify({'error': 'Email already registered'}), 409
+
+    user = User(
+        email=email,
+        password_hash=generate_password_hash(password),
+        role='student',
+    )
+    db.session.add(user)
+    db.session.flush()
+

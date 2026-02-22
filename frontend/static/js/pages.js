@@ -16,3 +16,8 @@ const LoginPage = {
                             <ul class="nav nav-pills nav-fill mb-4">
                                 <li class="nav-item"><a class="nav-link" :class="{active:tab==='login'}" href="#" @click.prevent="tab='login'">Login</a></li>
                                 <li class="nav-item"><a class="nav-link" :class="{active:tab==='reg-student'}" href="#" @click.prevent="tab='reg-student'">Student</a></li>
+                                <li class="nav-item"><a class="nav-link" :class="{active:tab==='reg-company'}" href="#" @click.prevent="tab='reg-company'">Company</a></li>
+                            </ul>
+                            <form v-if="tab==='login'" @submit.prevent="$emit('login',loginForm)">
+                                <div class="mb-3"><label class="form-label">Email</label><input type="email" class="form-control" v-model="loginForm.email" required></div>
+                                <div class="mb-3"><label class="form-label">Password</label><input type="password" class="form-control" v-model="loginForm.password" required></div>
