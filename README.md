@@ -45,3 +45,11 @@ The **Placement Portal Application (PPA)** is a multi-role web application that 
 
 ### 🏢 Company / HR
 - Self-registration (pending admin approval)
+- Full company profile management
+- Create, edit, and delete placement drives
+- View applicants per drive with filtering
+- Update application statuses: shortlisted → selected / rejected
+- Schedule interviews (date, mode, venue)
+- Record interview results (passed / failed)
+
+### 🎓 Student
