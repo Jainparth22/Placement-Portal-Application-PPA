@@ -52,3 +52,4 @@ try:
     _flask_app = create_app()
     init_celery(_flask_app)
 except Exception:
+    pass  # will be initialized by Flask when running as web server
