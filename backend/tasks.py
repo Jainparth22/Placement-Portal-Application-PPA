@@ -11,3 +11,10 @@ def send_email(subject, recipients, html_body):
         from app import mail
         from flask_mail import Message
         msg = Message(subject=subject, recipients=recipients, html=html_body)
+        mail.send(msg)
+        return True
+    except Exception as e:
+        print(f"Email sending failed: {e}")
+        return False
+
+
