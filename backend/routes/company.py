@@ -33,3 +33,17 @@ def register_company():
     if not ok:
         return jsonify({'error': err}), 400
     ok, err = validate_phone(data.get('hr_phone', ''))
+    if not ok:
+        return jsonify({'error': err}), 400
+    ok, err = validate_url(data.get('website', ''))
+    if not ok:
+        return jsonify({'error': err}), 400
+    if data.get('hr_email') and not validate_email(data['hr_email']):
+        return jsonify({'error': 'HR email is not valid'}), 400
+
+    if User.query.filter_by(email=email).first():
+        return jsonify({'error': 'Email already registered'}), 409
+
+    user = User(
+        email=email,
+        password_hash=generate_password_hash(password),

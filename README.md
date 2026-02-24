@@ -53,3 +53,19 @@ The **Placement Portal Application (PPA)** is a multi-role web application that 
 - Record interview results (passed / failed)
 
 ### 🎓 Student
+- Self-registration with profile (CGPA, department, graduation year, skills, bio)
+- Resume upload (PDF, DOC, DOCX — max 5 MB)
+- Browse and search approved placement drives
+- Eligibility check before applying (CGPA, branch, graduation year)
+- Apply with cover letter; withdraw if needed
+- Track all applications and interview schedules
+- **ATS Resume Checker** — AI-powered resume-vs-JD analysis (via Hugging Face Gradio)
+- Export applications as CSV (async background job)
+- Real-time in-app notifications
+
+### ⚙️ Background Jobs (Celery + Redis)
+| Task | Schedule | Description |
+|---|---|---|
+| `send_daily_reminders` | Every 24 hours | Emails students about drives with deadlines within 3 days |
+| `generate_monthly_report` | Every 30 days | Generates HTML + PDF placement summary, emails admin |
+| `export_applications_csv` | On-demand | Async CSV export of a student's application history |
