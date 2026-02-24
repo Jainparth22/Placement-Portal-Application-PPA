@@ -27,3 +27,21 @@
                 <span>PlacementPortal</span>
             </div>
             <nav class="sidebar-nav">
+                <div class="sidebar-section">Main</div>
+                <a href="#" @click.prevent="navigate('dashboard');sidebarOpen=false"
+                    :class="{active: currentPage==='dashboard'}">
+                    <i class="bi bi-grid-1x2"></i>Dashboard
+                </a>
+                <template v-if="user.role==='admin'">
+                    <div class="sidebar-section">Manage</div>
+                    <a href="#" @click.prevent="navigate('admin-companies');sidebarOpen=false"
+                        :class="{active: currentPage==='admin-companies'}">
+                        <i class="bi bi-building"></i>Companies
+                    </a>
+                    <a href="#" @click.prevent="navigate('admin-drives');sidebarOpen=false"
+                        :class="{active: currentPage==='admin-drives'}">
+                        <i class="bi bi-briefcase"></i>Drives
+                    </a>
+                    <a href="#" @click.prevent="navigate('admin-students');sidebarOpen=false"
+                        :class="{active: currentPage==='admin-students'}">
+                        <i class="bi bi-people"></i>Students
