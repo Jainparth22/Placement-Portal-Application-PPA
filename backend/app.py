@@ -53,3 +53,21 @@ def create_app():
         admin = User.query.filter_by(role='admin').first()
         if not admin:
             admin = User(
+                email=app.config['ADMIN_EMAIL'],
+                password_hash=generate_password_hash(app.config['ADMIN_PASSWORD']),
+                role='admin',
+                is_active=True,
+            )
+            db.session.add(admin)
+            db.session.commit()
+            print(f"[+] Admin user created: {app.config['ADMIN_EMAIL']}")
+
+    # Auth routes
+
+    @app.route('/api/auth/login', methods=['POST'])
+    def login():
+        data = request.json
+        if not data:
+            return jsonify({'error': 'No data provided'}), 400
+
+        email = data.get('email', '').strip()
