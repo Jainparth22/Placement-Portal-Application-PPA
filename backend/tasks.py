@@ -43,3 +43,19 @@ def send_daily_reminders():
             PlacementDrive.status == 'approved',
             PlacementDrive.application_deadline >= now,
             PlacementDrive.application_deadline <= upcoming_deadline
+        ).all()
+
+        students = StudentProfile.query.join(User).filter(
+            User.is_active == True,
+            User.is_blacklisted == False
+        ).all()
+
+        count = 0
+        for student in students:
+            reminder_drives = []
+            for drive in drives:
+                existing_app = Application.query.filter_by(
+                    student_id=student.id, drive_id=drive.id
+                ).first()
+                if not existing_app:
+                    # In-app notification
