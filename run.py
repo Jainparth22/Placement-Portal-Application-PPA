@@ -27,3 +27,8 @@ app = create_app()
 
 if __name__ == '__main__':
     prod = '--prod' in sys.argv
+    app.run(
+        host='0.0.0.0',
+        port=int(os.environ.get('PORT', 5001)),
+        debug=not prod,
+    )

@@ -83,3 +83,17 @@ The **Placement Portal Application (PPA)** is a multi-role web application that 
 |---|---|
 | **Backend** | Flask 3.x, SQLAlchemy 2.x, Flask-CORS, Flask-Mail |
 | **Auth** | PyJWT (custom JWT implementation — see note above) |
+| **Frontend** | Vue 3 (CDN), Axios, Bootstrap 5, Chart.js |
+| **Database** | SQLite (dev) — easily swappable to PostgreSQL |
+| **Background Jobs** | Celery 5.x + Redis |
+| **Caching** | Redis |
+| **PDF Generation** | xhtml2pdf |
+| **AI / ATS** | Hugging Face Gradio (`parthjain/ResumeAnalyser`) |
+
+---
+
+## 📁 Project Structure
+
+```
+P1- PPA/
+├── run.py                      ← Top-level entry point

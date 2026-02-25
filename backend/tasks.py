@@ -36,3 +36,10 @@ def send_gchat_webhook(message):
 def send_daily_reminders():
     """Send daily reminders for upcoming deadlines"""
     try:
+        now = datetime.datetime.utcnow()
+        upcoming_deadline = now + datetime.timedelta(days=3)
+
+        drives = PlacementDrive.query.filter(
+            PlacementDrive.status == 'approved',
+            PlacementDrive.application_deadline >= now,
+            PlacementDrive.application_deadline <= upcoming_deadline
