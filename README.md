@@ -69,3 +69,17 @@ The **Placement Portal Application (PPA)** is a multi-role web application that 
 | `send_daily_reminders` | Every 24 hours | Emails students about drives with deadlines within 3 days |
 | `generate_monthly_report` | Every 30 days | Generates HTML + PDF placement summary, emails admin |
 | `export_applications_csv` | On-demand | Async CSV export of a student's application history |
+
+### 🧠 Other
+- Redis caching for dashboard stats and drive listings (reduces DB load)
+- Google Chat webhook notifications for admin events
+- Input validation for all user-submitted fields
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| **Backend** | Flask 3.x, SQLAlchemy 2.x, Flask-CORS, Flask-Mail |
+| **Auth** | PyJWT (custom JWT implementation — see note above) |
