@@ -97,3 +97,22 @@ The **Placement Portal Application (PPA)** is a multi-role web application that 
 ```
 P1- PPA/
 ├── run.py                      ← Top-level entry point
+├── requirements.txt            ← Python dependencies
+├── .env.example                ← Environment variable template
+├── .gitignore
+├── README.md
+│
+├── backend/
+│   ├── app.py                  ← Flask application factory
+│   ├── auth.py                 ← JWT auth helpers & decorators
+│   ├── cache.py                ← Redis cache helpers
+│   ├── celery_worker.py        ← Celery app + beat schedule
+│   ├── config.py               ← App configuration (loads from .env)
+│   ├── models.py               ← SQLAlchemy models
+│   ├── tasks.py                ← Celery background tasks
+│   ├── validators.py           ← Input validation helpers
+│   └── routes/
+│       ├── __init__.py
+│       ├── admin.py            ← Admin API routes
+│       ├── company.py          ← Company API routes
+│       └── student.py          ← Student API routes
