@@ -43,3 +43,16 @@ def get_current_user():
         return user
     return None
 
+
+def login_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        user = get_current_user()
+        if not user:
+            return jsonify({'error': 'Authentication required'}), 401
+        return f(user, *args, **kwargs)
+    return decorated
+
+
+def role_required(*roles):
+    # decorator - checks if user has one of the required roles

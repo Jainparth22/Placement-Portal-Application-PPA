@@ -18,3 +18,14 @@ class Config:
     # chosen to have granular control over token payload, role-based decorators,
     # and blacklist logic. See auth.py for implementation details.
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'change-me-in-production')
+    JWT_ACCESS_TOKEN_EXPIRES = 3600  # 1 hour in seconds
+
+    # ── Redis ─────────────────────────────────────────────────────
+    REDIS_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379/0')
+
+    # ── Celery ────────────────────────────────────────────────────
+    CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://localhost:6379/1')
+    CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'redis://localhost:6379/1')
+
+    # ── Mail ──────────────────────────────────────────────────────
+    MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')
