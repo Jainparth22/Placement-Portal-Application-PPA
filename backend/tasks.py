@@ -59,3 +59,14 @@ def send_daily_reminders():
                 ).first()
                 if not existing_app:
                     # In-app notification
+                    notification = Notification(
+                        user_id=student.user_id,
+                        message=f"Reminder: Application deadline for '{drive.drive_name}' at {drive.company.company_name} is on {drive.application_deadline.strftime('%Y-%m-%d')}. Apply before it's too late!",
+                        channel='email',
+                        is_sent=True,
+                    )
+                    db.session.add(notification)
+                    reminder_drives.append(drive)
+                    count += 1
+
+            # Send a single email per student with all upcoming drives

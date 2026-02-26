@@ -71,3 +71,11 @@ def create_app():
             return jsonify({'error': 'No data provided'}), 400
 
         email = data.get('email', '').strip()
+        password = data.get('password', '').strip()
+
+        if not email or not password:
+            return jsonify({'error': 'Email and password are required'}), 400
+
+        if not validate_email(email):
+            return jsonify({'error': 'Invalid email format'}), 400
+
