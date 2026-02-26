@@ -29,3 +29,19 @@ class Config:
 
     # ── Mail ──────────────────────────────────────────────────────
     MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')
+    MAIL_PORT = int(os.environ.get('MAIL_PORT', 587))
+    MAIL_USE_TLS = True
+    MAIL_USERNAME = os.environ.get('MAIL_USERNAME', '')
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD', '')
+    MAIL_DEFAULT_SENDER = os.environ.get('MAIL_DEFAULT_SENDER', '')
+
+    # ── Google Chat Webhook (optional) ───────────────────────────
+    GCHAT_WEBHOOK_URL = os.environ.get('GCHAT_WEBHOOK_URL', '')
+
+    # ── File Uploads ──────────────────────────────────────────────
+    UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
+    MAX_CONTENT_LENGTH = 5 * 1024 * 1024  # 5 MB
+
+    # ── Admin (auto-created on first run) ─────────────────────────
+    ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', 'admin@placementportal.com')
+    ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'admin123')
