@@ -11,3 +11,22 @@ def get_redis():
     if _redis_client is None:
         try:
             _redis_client = redis.from_url(
+                current_app.config.get('REDIS_URL', 'redis://localhost:6379/0'),
+                decode_responses=True,
+                socket_connect_timeout=2
+            )
+            _redis_client.ping()
+        except Exception as e:
+            print(f'[!] Redis connection failed: {e}')
+            _redis_client = None
+    else:
+        # check if connection is still alive
+        try:
+            _redis_client.ping()
+        except Exception:
+            _redis_client = None  # reset so it retries next time
+    return _redis_client
+
+
+def cache_get(key):
+    r = get_redis()

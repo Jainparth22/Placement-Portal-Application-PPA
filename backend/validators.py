@@ -23,3 +23,21 @@ def validate_phone(phone):
     # allow digits, spaces, +, -, ()
     cleaned = re.sub(r'[\s\-\(\)\+]', '', phone)
     if not cleaned.isdigit():
+        return False, 'Phone number should contain only digits'
+    if len(cleaned) < 7 or len(cleaned) > 15:
+        return False, 'Phone number should be 7-15 digits'
+    return True, None
+
+def validate_cgpa(cgpa):
+    try:
+        val = float(cgpa)
+        if val < 0 or val > 10:
+            return False, 'CGPA must be between 0 and 10'
+        return True, None
+    except (ValueError, TypeError):
+        return False, 'CGPA must be a number'
+
+def validate_year(year):
+    if not year:
+        return True, None
+    try:

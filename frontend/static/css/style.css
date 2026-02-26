@@ -54,3 +54,20 @@
 }
 
 [data-theme="dark"] .bg-light {
+    background: #1e293b !important;
+}
+
+[data-theme="dark"] .text-muted {
+    color: var(--text-light) !important;
+}
+
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-select {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-color: #475569;
+}
+
+[data-theme="dark"] .table-dark th {
+    background: #0f172a;
+}
