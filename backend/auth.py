@@ -31,3 +31,15 @@ def decode_token(token):
 
 def get_current_user():
     # get user from jwt token in Authorization header
+    auth_header = request.headers.get('Authorization', '')
+    if not auth_header.startswith('Bearer '):
+        return None
+    token = auth_header.split(' ')[1]
+    payload = decode_token(token)
+    if not payload:
+        return None
+    user = User.query.get(payload['user_id'])
+    if user and user.is_active and not user.is_blacklisted:
+        return user
+    return None
+
