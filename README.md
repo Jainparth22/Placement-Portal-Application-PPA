@@ -116,3 +116,19 @@ P1- PPA/
 │       ├── admin.py            ← Admin API routes
 │       ├── company.py          ← Company API routes
 │       └── student.py          ← Student API routes
+│
+└── frontend/
+    ├── static/
+    │   ├── css/style.css       ← Custom stylesheet
+    │   └── js/
+    │       ├── app.js          ← Vue 3 main application
+    │       └── pages.js        ← Vue page components
+    └── templates/
+        └── index.html          ← Single-page app entry point
+```
+
+---
+
+## ⚙️ Installation & Setup
+
+### Prerequisites
