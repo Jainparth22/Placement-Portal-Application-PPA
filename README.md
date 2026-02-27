@@ -132,3 +132,10 @@ P1- PPA/
 ## ⚙️ Installation & Setup
 
 ### Prerequisites
+- Python 3.10+
+- Redis (running on `localhost:6379`)
+- Git
+
+### 1. Clone the Repository
+
+```bash
