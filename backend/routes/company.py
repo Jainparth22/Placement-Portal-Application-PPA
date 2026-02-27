@@ -47,3 +47,23 @@ def register_company():
     user = User(
         email=email,
         password_hash=generate_password_hash(password),
+        role='company',
+    )
+    db.session.add(user)
+    db.session.flush()
+
+    company = CompanyProfile(
+        user_id=user.id,
+        company_name=company_name,
+        hr_name=data.get('hr_name', ''),
+        hr_email=data.get('hr_email', email),
+        hr_phone=data.get('hr_phone', ''),
+        website=data.get('website', ''),
+        description=data.get('description', ''),
+        industry=data.get('industry', ''),
+        company_size=data.get('company_size', ''),
+        approval_status='pending',
+    )
+    db.session.add(company)
+
+    # Notify admin

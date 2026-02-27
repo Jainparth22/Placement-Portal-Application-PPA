@@ -17,3 +17,13 @@ def admin_dashboard(user):
     if cached:
         return jsonify(cached), 200
 
+    stats = {
+        'total_students': StudentProfile.query.count(),
+        'total_companies': CompanyProfile.query.count(),
+        'total_drives': PlacementDrive.query.count(),
+        'pending_companies': CompanyProfile.query.filter_by(approval_status='pending').count(),
+        'approved_companies': CompanyProfile.query.filter_by(approval_status='approved').count(),
+        'pending_drives': PlacementDrive.query.filter_by(status='pending').count(),
+        'approved_drives': PlacementDrive.query.filter_by(status='approved').count(),
+        'total_applications': Application.query.count(),
+        'selected_students': Application.query.filter_by(status='selected').count(),

@@ -70,3 +70,10 @@ def register_student():
         cgpa=float(data.get('cgpa', 0)),
         graduation_year=int(data.get('graduation_year', 0)) if data.get('graduation_year') else None,
         phone=data.get('phone', ''),
+        bio=data.get('bio', ''),
+    )
+    db.session.add(student)
+
+    # Add skills
+    skills = data.get('skills', [])
+    for s in skills:
