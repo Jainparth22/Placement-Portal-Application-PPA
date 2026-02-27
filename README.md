@@ -139,3 +139,13 @@ P1- PPA/
 ### 1. Clone the Repository
 
 ```bash
+git clone https://github.com/YOUR_USERNAME/ppa-placement-portal.git
+cd ppa-placement-portal
+```
+
+### 2. Create a Virtual Environment
+
+```bash
+python -m venv venv
+
+# Windows
