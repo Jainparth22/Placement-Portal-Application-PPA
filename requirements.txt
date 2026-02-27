@@ -18,3 +18,14 @@ celery>=5.4
 python-dotenv>=1.0
 
 # Resume processing
+PyPDF2>=3.0
+
+# ATS check (Hugging Face Gradio)
+gradio_client>=1.0
+
+# Report generation
+xhtml2pdf>=0.2.11
+
+# HTTP requests (for webhook notifications)
+requests>=2.31
+
