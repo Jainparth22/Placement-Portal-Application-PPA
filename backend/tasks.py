@@ -70,3 +70,22 @@ def send_daily_reminders():
                     count += 1
 
             # Send a single email per student with all upcoming drives
+            if reminder_drives and student.user and student.user.email:
+                drives_html = ''.join([
+                    f"<li><strong>{d.drive_name}</strong> at {d.company.company_name} — Deadline: {d.application_deadline.strftime('%Y-%m-%d')}</li>"
+                    for d in reminder_drives
+                ])
+                email_body = f"""
+                <html><body>
+                <h2>Placement Portal - Upcoming Deadlines</h2>
+                <p>Hi {student.full_name},</p>
+                <p>The following placement drives have upcoming deadlines (within 3 days):</p>
+                <ul>{drives_html}</ul>
+                <p>Log in to the Placement Portal to apply before it's too late!</p>
+                <p>Best regards,<br>Placement Portal Team</p>
+                </body></html>
+                """
+                send_email(
+                    subject="Placement Portal - Upcoming Application Deadlines",
+                    recipients=[student.user.email],
+                    html_body=email_body

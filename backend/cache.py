@@ -30,3 +30,15 @@ def get_redis():
 
 def cache_get(key):
     r = get_redis()
+    if r is None:
+        return None
+    try:
+        data = r.get(key)
+        if data:
+            return json.loads(data)
+    except Exception:
+        pass
+    return None
+
+
+def cache_set(key, value, ttl=300):

@@ -63,3 +63,10 @@ def register_student():
     db.session.add(user)
     db.session.flush()
 
+    student = StudentProfile(
+        user_id=user.id,
+        full_name=full_name,
+        department=data.get('department', ''),
+        cgpa=float(data.get('cgpa', 0)),
+        graduation_year=int(data.get('graduation_year', 0)) if data.get('graduation_year') else None,
+        phone=data.get('phone', ''),
