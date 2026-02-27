@@ -71,3 +71,19 @@
 [data-theme="dark"] .table-dark th {
     background: #0f172a;
 }
+
+[data-theme="dark"] .dropdown-menu {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+[data-theme="dark"] .dropdown-item {
+    color: #e2e8f0;
+}
+
+[data-theme="dark"] .dropdown-item:hover {
+    background: #334155;
+}
+
+[data-theme="dark"] .modal-content {
+    background: #1e293b;
