@@ -41,3 +41,27 @@ def validate_year(year):
     if not year:
         return True, None
     try:
+        y = int(year)
+        if y < 2000 or y > 2035:
+            return False, 'Graduation year must be between 2000 and 2035'
+        return True, None
+    except (ValueError, TypeError):
+        return False, 'Graduation year must be a valid number'
+
+def validate_url(url):
+    if not url:
+        return True, None  # optional
+    url = url.strip()
+    pattern = r'^https?://[a-zA-Z0-9]([a-zA-Z0-9\-]*\.)+[a-zA-Z]{2,}'
+    if not re.match(pattern, url):
+        return False, 'Please enter a valid URL starting with http:// or https://'
+    return True, None
+
+def validate_name(name, field='Name'):
+    if not name or not name.strip():
+        return False, f'{field} is required'
+    if len(name.strip()) < 2:
+        return False, f'{field} must be at least 2 characters'
+    if len(name.strip()) > 150:
+        return False, f'{field} is too long'
+    return True, None

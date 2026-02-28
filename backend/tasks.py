@@ -89,3 +89,102 @@ def send_daily_reminders():
                     subject="Placement Portal - Upcoming Application Deadlines",
                     recipients=[student.user.email],
                     html_body=email_body
+                )
+                # webhook notification
+                drives_text = ', '.join([f"{d.drive_name} (deadline: {d.application_deadline.strftime('%Y-%m-%d')})" for d in reminder_drives])
+                send_gchat_webhook(f"Reminder for {student.full_name}: Upcoming deadlines - {drives_text}")
+
+        db.session.commit()
+        return {'status': 'success', 'reminders_sent': count}
+    except Exception as e:
+        db.session.rollback()
+        return {'status': 'error', 'message': str(e)}
+
+
+@celery.task(name='tasks.generate_monthly_report')
+def generate_monthly_report(job_id=None):
+    """Generate monthly report and email it to admin"""
+    job = None
+    try:
+        if job_id:
+            job = AsyncJob.query.get(job_id)
+            if job:
+                job.status = 'running'
+                db.session.commit()
+
+        now = datetime.datetime.utcnow()
+        month_str = now.strftime('%Y-%m')
+        first_day = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        if now.month == 12:
+            last_day = first_day.replace(year=now.year + 1, month=1)
+        else:
+            last_day = first_day.replace(month=now.month + 1)
+
+        total_drives = PlacementDrive.query.filter(
+            PlacementDrive.created_at >= first_day,
+            PlacementDrive.created_at < last_day
+        ).count()
+
+        total_applications = Application.query.filter(
+            Application.application_date >= first_day,
+            Application.application_date < last_day
+        ).count()
+
+        total_selected = Application.query.filter(
+            Application.application_date >= first_day,
+            Application.application_date < last_day,
+            Application.status == 'selected'
+        ).count()
+
+        report_html = f"""
+        <html>
+        <head><title>Monthly Placement Report - {month_str}</title>
+        <style>
+            body {{ font-family: Arial, sans-serif; padding: 20px; }}
+            h1 {{ color: #2c3e50; }}
+            table {{ border-collapse: collapse; width: 100%; margin-top: 20px; }}
+            th, td {{ border: 1px solid #ddd; padding: 12px; text-align: left; }}
+            th {{ background-color: #3498db; color: white; }}
+            .stat {{ font-size: 24px; font-weight: bold; color: #2c3e50; }}
+        </style>
+        </head>
+        <body>
+            <h1>Monthly Placement Report - {month_str}</h1>
+            <table>
+                <tr><th>Metric</th><th>Count</th></tr>
+                <tr><td>Total Placement Drives</td><td class="stat">{total_drives}</td></tr>
+                <tr><td>Total Applications</td><td class="stat">{total_applications}</td></tr>
+                <tr><td>Students Selected</td><td class="stat">{total_selected}</td></tr>
+            </table>
+            <p><em>Report generated on {now.strftime('%Y-%m-%d %H:%M')}</em></p>
+        </body>
+        </html>
+        """
+
+        # save HTML report
+        reports_dir = os.path.join(os.path.dirname(__file__), 'reports')
+        os.makedirs(reports_dir, exist_ok=True)
+        report_path = os.path.join(reports_dir, f'report_{month_str}.html')
+        with open(report_path, 'w') as f:
+            f.write(report_html)
+
+        # also generate PDF
+        pdf_path = os.path.join(reports_dir, f'report_{month_str}.pdf')
+        try:
+            from xhtml2pdf import pisa
+            with open(pdf_path, 'wb') as pdf_file:
+                pisa.CreatePDF(report_html, dest=pdf_file)
+        except Exception as pdf_err:
+            print(f"PDF generation failed: {pdf_err}")
+            pdf_path = None
+
+        report = MonthlyReport(
+            month=month_str,
+            total_drives=total_drives,
+            total_applications=total_applications,
+            total_selected=total_selected,
+            report_path=report_path,
+        )
+        db.session.add(report)
+
+        # notify admin + send email
