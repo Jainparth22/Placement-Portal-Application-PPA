@@ -182,3 +182,56 @@ def create_drive(user):
     if not data:
         return jsonify({'error': 'No data provided'}), 400
 
+    drive_name = data.get('drive_name', '').strip()
+    job_title = data.get('job_title', '').strip()
+    if not drive_name or not job_title:
+        return jsonify({'error': 'Drive name and job title are required'}), 400
+
+    # validate drive fields
+    if data.get('min_cgpa'):
+        ok, err = validate_cgpa(data['min_cgpa'])
+        if not ok:
+            return jsonify({'error': err}), 400
+    if data.get('eligible_year'):
+        ok, err = validate_year(data['eligible_year'])
+        if not ok:
+            return jsonify({'error': err}), 400
+
+    deadline = None
+    if data.get('application_deadline'):
+        try:
+            deadline = datetime.fromisoformat(data['application_deadline'])
+            if deadline < datetime.utcnow():
+                return jsonify({'error': 'Deadline must be in the future'}), 400
+        except ValueError:
+            return jsonify({'error': 'Invalid deadline format'}), 400
+
+    drive = PlacementDrive(
+        company_id=company.id,
+        drive_name=drive_name,
+        job_title=job_title,
+        job_description=data.get('job_description', ''),
+        eligibility_branch=data.get('eligibility_branch', ''),
+        min_cgpa=float(data.get('min_cgpa', 0)),
+        eligible_year=int(data.get('eligible_year', 0)) if data.get('eligible_year') else None,
+        application_deadline=deadline,
+        location=data.get('location', ''),
+        salary=data.get('salary', ''),
+        job_type=data.get('job_type', 'Full-time'),
+        status='pending',
+    )
+    db.session.add(drive)
+
+    # Notify admin
+    admin = User.query.filter_by(role='admin').first()
+    if admin:
+        notification = Notification(
+            user_id=admin.id,
+            message=f'New placement drive "{drive_name}" by {company.company_name} awaiting approval.',
+            channel='in-app', is_sent=True,
+        )
+        db.session.add(notification)
+
+    db.session.commit()
+    cache_delete('admin_stats')
+    return jsonify({'message': 'Drive created. Awaiting admin approval.', 'drive': drive.to_dict()}), 201

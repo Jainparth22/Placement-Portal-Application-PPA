@@ -77,3 +77,109 @@ def register_student():
     # Add skills
     skills = data.get('skills', [])
     for s in skills:
+        skill = Skill(student_id=student.id, skill_name=s.strip())
+        db.session.add(skill)
+
+    db.session.commit()
+    cache_delete('admin_stats')
+    return jsonify({'message': 'Student registered successfully', 'student': student.to_dict()}), 201
+
+
+# student profile
+@student_bp.route('/api/students/profile', methods=['GET'])
+@role_required('student')
+def get_student_profile(user):
+    student = StudentProfile.query.filter_by(user_id=user.id).first()
+    if not student:
+        return jsonify({'error': 'Student profile not found'}), 404
+    return jsonify(student.to_dict()), 200
+
+
+@student_bp.route('/api/students/profile', methods=['PUT'])
+@role_required('student')
+def update_student_profile(user):
+    student = StudentProfile.query.filter_by(user_id=user.id).first()
+    if not student:
+        return jsonify({'error': 'Student profile not found'}), 404
+
+    data = request.json
+    if data.get('full_name'):
+        ok, err = validate_name(data['full_name'], 'Full name')
+        if not ok:
+            return jsonify({'error': err}), 400
+        student.full_name = data['full_name']
+    if data.get('department'):
+        student.department = data['department']
+    if 'cgpa' in data:
+        ok, err = validate_cgpa(data['cgpa'])
+        if not ok:
+            return jsonify({'error': err}), 400
+        student.cgpa = float(data['cgpa'])
+    if data.get('graduation_year'):
+        ok, err = validate_year(data['graduation_year'])
+        if not ok:
+            return jsonify({'error': err}), 400
+        student.graduation_year = int(data['graduation_year'])
+    if data.get('phone'):
+        ok, err = validate_phone(data['phone'])
+        if not ok:
+            return jsonify({'error': err}), 400
+        student.phone = data['phone']
+    if data.get('bio'):
+        student.bio = data['bio']
+
+    # Update skills
+    if 'skills' in data:
+        Skill.query.filter_by(student_id=student.id).delete()
+        for s in data['skills']:
+            skill = Skill(student_id=student.id, skill_name=s.strip())
+            db.session.add(skill)
+
+    db.session.commit()
+    return jsonify({'message': 'Profile updated', 'student': student.to_dict()}), 200
+
+
+# upload resume
+@student_bp.route('/api/students/upload-resume', methods=['POST'])
+@role_required('student')
+def upload_resume(user):
+    student = StudentProfile.query.filter_by(user_id=user.id).first()
+    if not student:
+        return jsonify({'error': 'Student profile not found'}), 404
+
+    if 'resume' not in request.files:
+        return jsonify({'error': 'No file provided'}), 400
+
+    file = request.files['resume']
+    if file.filename == '':
+        return jsonify({'error': 'No file selected'}), 400
+
+    if not allowed_file(file.filename):
+        return jsonify({'error': 'Only PDF, DOC, DOCX files allowed'}), 400
+
+    upload_dir = os.path.join(current_app.config.get('UPLOAD_FOLDER', 'uploads'), 'resumes')
+    os.makedirs(upload_dir, exist_ok=True)
+    filename = secure_filename(f"resume_{student.id}_{file.filename}")
+    filepath = os.path.join(upload_dir, filename)
+    file.save(filepath)
+
+    student.resume_path = filepath
+    db.session.commit()
+    return jsonify({'message': 'Resume uploaded successfully', 'resume_path': filepath}), 200
+
+
+# browse drives (cached)
+@student_bp.route('/api/student/drives', methods=['GET'])
+@role_required('student')
+def browse_drives(user):
+    search = request.args.get('search', '').strip()
+    branch = request.args.get('branch', '').strip()
+    min_cgpa = request.args.get('min_cgpa', None, type=float)
+
+    cache_key = f'approved_drives:{search}:{branch}:{min_cgpa}'
+    if not search and not branch and min_cgpa is None:
+        cached = cache_get('approved_drives')
+        if cached:
+            return jsonify(cached), 200
+
+    query = PlacementDrive.query.filter_by(status='approved')
