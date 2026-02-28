@@ -45,3 +45,93 @@
                     <a href="#" @click.prevent="navigate('admin-students');sidebarOpen=false"
                         :class="{active: currentPage==='admin-students'}">
                         <i class="bi bi-people"></i>Students
+                    </a>
+                    <a href="#" @click.prevent="navigate('admin-applications');sidebarOpen=false"
+                        :class="{active: currentPage==='admin-applications'}">
+                        <i class="bi bi-file-earmark-text"></i>Applications
+                    </a>
+                    <div class="sidebar-section">Reports</div>
+                    <a href="#" @click.prevent="navigate('admin-reports');sidebarOpen=false"
+                        :class="{active: currentPage==='admin-reports'}">
+                        <i class="bi bi-graph-up"></i>Reports
+                    </a>
+                </template>
+                <template v-if="user.role==='company'">
+                    <div class="sidebar-section">Company</div>
+                    <a href="#" @click.prevent="navigate('company-drives');sidebarOpen=false"
+                        :class="{active: currentPage==='company-drives'}">
+                        <i class="bi bi-briefcase"></i>My Drives
+                    </a>
+                    <a href="#" @click.prevent="navigate('company-profile');sidebarOpen=false"
+                        :class="{active: currentPage==='company-profile'}">
+                        <i class="bi bi-gear"></i>Profile
+                    </a>
+                </template>
+                <template v-if="user.role==='student'">
+                    <div class="sidebar-section">Explore</div>
+                    <a href="#" @click.prevent="navigate('student-drives');sidebarOpen=false"
+                        :class="{active: currentPage==='student-drives'}">
+                        <i class="bi bi-briefcase"></i>Browse Drives
+                    </a>
+                    <a href="#" @click.prevent="navigate('student-applications');sidebarOpen=false"
+                        :class="{active: currentPage==='student-applications'}">
+                        <i class="bi bi-file-earmark-text"></i>My Applications
+                    </a>
+                    <a href="#" @click.prevent="navigate('student-interviews');sidebarOpen=false"
+                        :class="{active: currentPage==='student-interviews'}">
+                        <i class="bi bi-camera-video"></i>Interviews
+                    </a>
+                    <div class="sidebar-section">Account</div>
+                    <a href="#" @click.prevent="navigate('student-history');sidebarOpen=false"
+                        :class="{active: currentPage==='student-history'}">
+                        <i class="bi bi-clock-history"></i>History
+                    </a>
+                    <a href="#" @click.prevent="navigate('student-profile');sidebarOpen=false"
+                        :class="{active: currentPage==='student-profile'}">
+                        <i class="bi bi-person"></i>Profile
+                    </a>
+                </template>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <div class="sidebar-user-avatar">${user.email ? user.email[0].toUpperCase() : '?'}</div>
+                    <div class="sidebar-user-info">
+                        <small>${user.email}</small>
+                        <span class="role-tag">${user.role}</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Mobile sidebar overlay -->
+        <div class="sidebar-overlay" v-if="sidebarOpen && isLoggedIn" @click="sidebarOpen=false"></div>
+
+        <!-- Topbar -->
+        <header class="app-topbar" v-if="isLoggedIn">
+            <div class="topbar-left">
+                <button class="sidebar-toggle" @click="sidebarOpen=!sidebarOpen">
+                    <i class="bi bi-list"></i>
+                </button>
+                <h5>${pageTitle}</h5>
+            </div>
+            <div class="topbar-right">
+                <button class="btn-theme-toggle" @click="toggleTheme" :title="darkMode?'Light mode':'Dark mode'">
+                    <i :class="darkMode?'bi bi-sun':'bi bi-moon'"></i>
+                </button>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-secondary position-relative" data-bs-toggle="dropdown">
+                        <i class="bi bi-bell"></i>
+                        <span v-if="unreadNotifications>0"
+                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">${unreadNotifications}</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end notification-dropdown">
+                        <li class="dropdown-header d-flex justify-content-between">
+                            <strong>Notifications</strong><a href="#" @click.prevent="markAllRead"
+                                class="text-primary small">Mark all read</a>
+                        </li>
+                        <li v-if="notifications.length===0"><span class="dropdown-item text-muted small">No
+                                notifications</span></li>
+                        <li v-for="n in notifications.slice(0,10)" :key="n.id"><a class="dropdown-item small"
+                                :class="{'fw-bold':!n.is_read}" href="#"
+                                @click.prevent="markRead(n.id)">${n.message}<br><small
+                                    class="text-muted">${formatDate(n.created_at)}</small></a></li>

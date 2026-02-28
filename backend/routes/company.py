@@ -67,3 +67,118 @@ def register_company():
     db.session.add(company)
 
     # Notify admin
+    admin = User.query.filter_by(role='admin').first()
+    if admin:
+        notification = Notification(
+            user_id=admin.id,
+            message=f'New company "{company_name}" registered and awaiting approval.',
+            channel='in-app', is_sent=True,
+        )
+        db.session.add(notification)
+
+    db.session.commit()
+    cache_delete('admin_stats')
+    return jsonify({'message': 'Company registered successfully. Awaiting admin approval.', 'company': company.to_dict()}), 201
+
+
+# company profile
+@company_bp.route('/api/companies/profile', methods=['GET'])
+@role_required('company')
+def get_company_profile(user):
+    company = CompanyProfile.query.filter_by(user_id=user.id).first()
+    if not company:
+        return jsonify({'error': 'Company profile not found'}), 404
+    return jsonify(company.to_dict()), 200
+
+
+@company_bp.route('/api/companies/profile', methods=['PUT'])
+@role_required('company')
+def update_company_profile(user):
+    company = CompanyProfile.query.filter_by(user_id=user.id).first()
+    if not company:
+        return jsonify({'error': 'Company profile not found'}), 404
+
+    data = request.json
+    if data.get('company_name'):
+        ok, err = validate_name(data['company_name'], 'Company name')
+        if not ok:
+            return jsonify({'error': err}), 400
+        company.company_name = data['company_name']
+    if data.get('hr_name'):
+        company.hr_name = data['hr_name']
+    if data.get('hr_email'):
+        if not validate_email(data['hr_email']):
+            return jsonify({'error': 'HR email is not valid'}), 400
+        company.hr_email = data['hr_email']
+    if data.get('hr_phone'):
+        ok, err = validate_phone(data['hr_phone'])
+        if not ok:
+            return jsonify({'error': err}), 400
+        company.hr_phone = data['hr_phone']
+    if data.get('website'):
+        ok, err = validate_url(data['website'])
+        if not ok:
+            return jsonify({'error': err}), 400
+        company.website = data['website']
+    if data.get('description'):
+        company.description = data['description']
+    if data.get('industry'):
+        company.industry = data['industry']
+    if data.get('company_size'):
+        company.company_size = data['company_size']
+
+    db.session.commit()
+    return jsonify({'message': 'Profile updated', 'company': company.to_dict()}), 200
+
+
+# company dashboard
+@company_bp.route('/api/company/dashboard', methods=['GET'])
+@role_required('company')
+def company_dashboard(user):
+    company = CompanyProfile.query.filter_by(user_id=user.id).first()
+    if not company:
+        return jsonify({'error': 'Company not found'}), 404
+
+    drives = PlacementDrive.query.filter_by(company_id=company.id).all()
+    total_applicants = sum(d.applications.count() for d in drives)
+
+    return jsonify({
+        'company': company.to_dict(),
+        'total_drives': len(drives),
+        'total_applicants': total_applicants,
+        'drives_summary': [
+            {
+                'id': d.id,
+                'drive_name': d.drive_name,
+                'status': d.status,
+                'applicants': d.applications.count(),
+            }
+            for d in drives
+        ],
+    }), 200
+
+
+# placement drives
+@company_bp.route('/api/company/drives', methods=['GET'])
+@role_required('company')
+def list_company_drives(user):
+    company = CompanyProfile.query.filter_by(user_id=user.id).first()
+    if not company:
+        return jsonify({'error': 'Company not found'}), 404
+    drives = PlacementDrive.query.filter_by(company_id=company.id).order_by(PlacementDrive.id.desc()).all()
+    return jsonify([d.to_dict() for d in drives]), 200
+
+
+@company_bp.route('/api/company/drives', methods=['POST'])
+@role_required('company')
+def create_drive(user):
+    company = CompanyProfile.query.filter_by(user_id=user.id).first()
+    if not company:
+        return jsonify({'error': 'Company not found'}), 404
+    if company.approval_status != 'approved':
+        return jsonify({'error': 'Company must be approved by admin before creating drives'}), 403
+
+    data = request.json
+    if not data:
+        return jsonify({'error': 'No data provided'}), 400
+
