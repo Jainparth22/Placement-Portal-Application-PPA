@@ -148,3 +148,123 @@ class Application(db.Model):
     student_id = db.Column(db.Integer, db.ForeignKey('student_profiles.id'), nullable=False)
     drive_id = db.Column(db.Integer, db.ForeignKey('placement_drives.id'), nullable=False)
     application_date = db.Column(db.DateTime, default=datetime.utcnow)
+    status = db.Column(db.String(20), default='applied')  # applied, shortlisted, selected, rejected, withdrawn
+    interview_type = db.Column(db.String(50))
+    remarks = db.Column(db.Text)
+    cover_letter = db.Column(db.Text)
+
+    interviews = db.relationship('Interview', backref='application', lazy='dynamic', cascade='all, delete-orphan')
+
+    __table_args__ = (db.UniqueConstraint('student_id', 'drive_id', name='unique_student_drive'),)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'student_id': self.student_id,
+            'drive_id': self.drive_id,
+            'student_name': self.student.full_name if self.student else None,
+            'student_email': self.student.user.email if self.student and self.student.user else None,
+            'student_cgpa': self.student.cgpa if self.student else None,
+            'student_department': self.student.department if self.student else None,
+            'drive_name': self.drive.drive_name if self.drive else None,
+            'company_name': self.drive.company.company_name if self.drive and self.drive.company else None,
+            'job_title': self.drive.job_title if self.drive else None,
+            'application_date': self.application_date.isoformat() if self.application_date else None,
+            'status': self.status,
+            'interview_type': self.interview_type,
+            'remarks': self.remarks,
+            'cover_letter': self.cover_letter,
+        }
+
+
+class DriveApproval(db.Model):
+    __tablename__ = 'drive_approvals'
+    id = db.Column(db.Integer, primary_key=True)
+    drive_id = db.Column(db.Integer, db.ForeignKey('placement_drives.id'), nullable=False)
+    admin_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    action = db.Column(db.String(20), nullable=False)  # approved, rejected
+    remarks = db.Column(db.Text)
+    action_date = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'drive_id': self.drive_id,
+            'admin_id': self.admin_id,
+            'action': self.action,
+            'remarks': self.remarks,
+            'action_date': self.action_date.isoformat() if self.action_date else None,
+        }
+
+
+class Interview(db.Model):
+    __tablename__ = 'interviews'
+    id = db.Column(db.Integer, primary_key=True)
+    application_id = db.Column(db.Integer, db.ForeignKey('applications.id'), nullable=False)
+    interview_date = db.Column(db.DateTime)
+    mode = db.Column(db.String(50))  # Online / Offline
+    venue = db.Column(db.String(200))
+    result = db.Column(db.String(20))  # pending, passed, failed
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'application_id': self.application_id,
+            'interview_date': self.interview_date.isoformat() if self.interview_date else None,
+            'mode': self.mode,
+            'venue': self.venue,
+            'result': self.result,
+        }
+
+
+class PlacementHistory(db.Model):
+    __tablename__ = 'placement_history'
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('student_profiles.id'), nullable=False)
+    company_name = db.Column(db.String(150))
+    job_title = db.Column(db.String(150))
+    selection_date = db.Column(db.DateTime)
+    salary = db.Column(db.String(100))
+    status = db.Column(db.String(20))  # selected, joined, declined
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'student_id': self.student_id,
+            'company_name': self.company_name,
+            'job_title': self.job_title,
+            'selection_date': self.selection_date.isoformat() if self.selection_date else None,
+            'salary': self.salary,
+            'status': self.status,
+        }
+
+
+class MonthlyReport(db.Model):
+    __tablename__ = 'monthly_reports'
+    id = db.Column(db.Integer, primary_key=True)
+    month = db.Column(db.String(20), nullable=False)
+    total_drives = db.Column(db.Integer, default=0)
+    total_applications = db.Column(db.Integer, default=0)
+    total_selected = db.Column(db.Integer, default=0)
+    report_path = db.Column(db.String(256))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'month': self.month,
+            'total_drives': self.total_drives,
+            'total_applications': self.total_applications,
+            'total_selected': self.total_selected,
+            'report_path': self.report_path,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+        }
+
+
+class Notification(db.Model):
+    __tablename__ = 'notifications'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    channel = db.Column(db.String(20), default='in-app')  # in-app, email, webhook
+    is_sent = db.Column(db.Boolean, default=False)
