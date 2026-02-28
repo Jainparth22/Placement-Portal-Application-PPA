@@ -19,3 +19,51 @@ var/
 *.spec
 pip-log.txt
 pip-delete-this-directory.txt
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+.env/
+
+# Environment variables (keep secrets out of git)
+.env
+
+# SQLite database
+instance/
+*.db
+*.sqlite3
+
+# Flask uploads, exports, reports (generated at runtime)
+backend/uploads/
+backend/exports/
+backend/reports/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Distribution
+*.tar.gz
+*.zip
