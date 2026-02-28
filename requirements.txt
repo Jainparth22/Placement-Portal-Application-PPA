@@ -29,3 +29,5 @@ xhtml2pdf>=0.2.11
 # HTTP requests (for webhook notifications)
 requests>=2.31
 
+# Production WSGI server
+gunicorn>=21.2

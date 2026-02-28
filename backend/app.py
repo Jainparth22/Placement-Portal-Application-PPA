@@ -79,3 +79,57 @@ def create_app():
         if not validate_email(email):
             return jsonify({'error': 'Invalid email format'}), 400
 
+        user = User.query.filter_by(email=email).first()
+        if not user or not check_password_hash(user.password_hash, password):
+            return jsonify({'error': 'Invalid email or password'}), 401
+
+        if not user.is_active:
+            return jsonify({'error': 'Account is deactivated. Contact admin.'}), 403
+
+        if user.is_blacklisted:
+            return jsonify({'error': 'Account is blacklisted. Contact admin.'}), 403
+
+        user.last_login = datetime.utcnow()
+        db.session.commit()
+
+        token = generate_token(user)
+        response = {
+            'message': 'Login successful',
+            'token': token,
+            'user': user.to_dict(),
+        }
+
+        # Include profile info
+        if user.role == 'student' and user.student_profile:
+            response['profile'] = user.student_profile.to_dict()
+        elif user.role == 'company' and user.company_profile:
+            response['profile'] = user.company_profile.to_dict()
+
+        return jsonify(response), 200
+
+    @app.route('/api/auth/logout', methods=['POST'])
+    @login_required
+    def logout(user):
+        return jsonify({'message': 'Logged out successfully'}), 200
+
+    @app.route('/api/auth/me', methods=['GET'])
+    @login_required
+    def current_user_info(user):
+        response = {'user': user.to_dict()}
+        if user.role == 'student' and user.student_profile:
+            response['profile'] = user.student_profile.to_dict()
+        elif user.role == 'company' and user.company_profile:
+            response['profile'] = user.company_profile.to_dict()
+        return jsonify(response), 200
+
+    # notifications and jobs
+
+    @app.route('/api/notifications', methods=['GET'])
+    @login_required
+    def get_notifications(user):
+        notifications = Notification.query.filter_by(user_id=user.id).order_by(
+            Notification.created_at.desc()
+        ).limit(50).all()
+        return jsonify([n.to_dict() for n in notifications]), 200
+
+    @app.route('/api/notifications/<int:id>/read', methods=['PUT'])
