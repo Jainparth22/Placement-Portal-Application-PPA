@@ -145,3 +145,22 @@ body {
 .sidebar-nav a {
     display: flex;
     align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    color: var(--text-sidebar);
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: .88rem;
+    font-weight: 500;
+    margin-bottom: 2px;
+    transition: all .15s;
+    white-space: nowrap;
+}
+
+.sidebar-nav a:hover {
+    background: var(--bg-sidebar-hover);
+    color: #fff;
+}
+
+.sidebar-nav a.active {
+    background: var(--primary);

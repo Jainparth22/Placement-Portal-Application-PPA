@@ -42,3 +42,13 @@ def cache_get(key):
 
 
 def cache_set(key, value, ttl=300):
+    # default 5 min TTL
+    r = get_redis()
+    if r is None:
+        return False
+    try:
+        r.setex(key, ttl, json.dumps(value))
+        return True
+    except Exception:
+        return False
+
