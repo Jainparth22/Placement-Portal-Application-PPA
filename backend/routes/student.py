@@ -183,3 +183,15 @@ def browse_drives(user):
             return jsonify(cached), 200
 
     query = PlacementDrive.query.filter_by(status='approved')
+
+    if search:
+        query = query.filter(
+            (PlacementDrive.drive_name.ilike(f'%{search}%')) |
+            (PlacementDrive.job_title.ilike(f'%{search}%')) |
+            (PlacementDrive.location.ilike(f'%{search}%'))
+        )
+    if branch:
+        query = query.filter(PlacementDrive.eligibility_branch.ilike(f'%{branch}%'))
+
+    drives = query.order_by(PlacementDrive.application_deadline.asc()).all()
+    result = [d.to_dict() for d in drives]

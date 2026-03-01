@@ -188,3 +188,17 @@ def generate_monthly_report(job_id=None):
         db.session.add(report)
 
         # notify admin + send email
+        admin = User.query.filter_by(role='admin').first()
+        if admin:
+            notification = Notification(
+                user_id=admin.id,
+                message=f"Monthly placement report for {month_str} is ready. Drives: {total_drives}, Applications: {total_applications}, Selected: {total_selected}",
+                channel='email',
+                is_sent=True,
+            )
+            db.session.add(notification)
+
+            # Email the report to admin
+            send_email(
+                subject=f"Placement Portal - Monthly Report {month_str}",
+                recipients=[admin.email],

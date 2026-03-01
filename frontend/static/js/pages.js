@@ -21,3 +21,12 @@ const LoginPage = {
                             <form v-if="tab==='login'" @submit.prevent="$emit('login',loginForm)">
                                 <div class="mb-3"><label class="form-label">Email</label><input type="email" class="form-control" v-model="loginForm.email" required></div>
                                 <div class="mb-3"><label class="form-label">Password</label><input type="password" class="form-control" v-model="loginForm.password" required></div>
+                                <button type="submit" class="btn btn-primary w-100"><i class="bi bi-box-arrow-in-right me-1"></i>Login</button>
+                            </form>
+                            <form v-if="tab==='reg-student'" @submit.prevent="$emit('register-student',sForm)">
+                                <div class="row"><div class="col-md-6 mb-3"><label class="form-label">Full Name *</label><input type="text" class="form-control" v-model="sForm.full_name" required></div><div class="col-md-6 mb-3"><label class="form-label">Email *</label><input type="email" class="form-control" v-model="sForm.email" required></div></div>
+                                <div class="mb-3"><label class="form-label">Password *</label><input type="password" class="form-control" v-model="sForm.password" required minlength="6"></div>
+                                <div class="row"><div class="col-md-4 mb-3"><label class="form-label">Department</label><select class="form-select" v-model="sForm.department"><option value="">Select</option><option v-for="d in depts" :value="d">{{d}}</option></select></div><div class="col-md-4 mb-3"><label class="form-label">CGPA</label><input type="number" class="form-control" v-model="sForm.cgpa" step="0.01" min="0" max="10"></div><div class="col-md-4 mb-3"><label class="form-label">Grad Year</label><input type="number" class="form-control" v-model="sForm.graduation_year" min="2020" max="2030"></div></div>
+                                <div class="mb-3"><label class="form-label">Phone</label><input type="tel" class="form-control" v-model="sForm.phone"></div>
+                                <button type="submit" class="btn btn-success w-100"><i class="bi bi-person-plus me-1"></i>Register</button>
+                            </form>
