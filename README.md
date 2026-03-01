@@ -160,3 +160,23 @@ source venv/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
+
+### 4. Configure Environment Variables
+
+```bash
+# Copy the example file
+cp .env.example .env
+
+# Edit .env and fill in your actual values
+# Required: SECRET_KEY, JWT_SECRET_KEY, ADMIN_EMAIL, ADMIN_PASSWORD
+# Optional: MAIL_*, GCHAT_WEBHOOK_URL (for notifications)
+```
+
+Key variables in `.env`:
+
+| Variable | Description |
+|---|---|
+| `SECRET_KEY` | Flask session secret |
+| `JWT_SECRET_KEY` | JWT signing secret |
+| `ADMIN_EMAIL` | Admin account email (auto-created) |
+| `ADMIN_PASSWORD` | Admin account password |

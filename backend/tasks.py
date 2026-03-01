@@ -233,3 +233,9 @@ def export_applications_csv(user_id, student_id, job_id):
     """Export student applications to CSV"""
     job = None
     try:
+        job = AsyncJob.query.get(job_id)
+        if job:
+            job.status = 'running'
+            db.session.commit()
+
+        applications = Application.query.filter_by(student_id=student_id).all()

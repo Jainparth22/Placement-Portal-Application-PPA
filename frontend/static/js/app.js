@@ -74,3 +74,15 @@ const app = createApp({
             interviewAppId: null,
 
             // Lists
+            departments: ['CSE', 'ECE', 'EEE', 'ME', 'CE', 'IT', 'BT', 'CHE'],
+            adminStatCards: {
+                total_students: { label: 'Total Students', icon: 'bi bi-people text-primary', class: '' },
+                total_companies: { label: 'Total Companies', icon: 'bi bi-building text-success', class: '' },
+                total_drives: { label: 'Total Drives', icon: 'bi bi-briefcase text-warning', class: '' },
+                total_applications: { label: 'Applications', icon: 'bi bi-file-earmark-text text-info', class: '' },
+                selected_students: { label: 'Selections', icon: 'bi bi-trophy text-danger', class: '' },
+                pending_companies: { label: 'Pending Companies', icon: 'bi bi-hourglass text-secondary', class: '' },
+                pending_drives: { label: 'Pending Drives', icon: 'bi bi-clock text-dark', class: '' },
+                blacklisted_users: { label: 'Blacklisted', icon: 'bi bi-shield-x text-danger', class: '' },
+            },
+
