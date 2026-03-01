@@ -202,3 +202,22 @@ def generate_monthly_report(job_id=None):
             send_email(
                 subject=f"Placement Portal - Monthly Report {month_str}",
                 recipients=[admin.email],
+                html_body=report_html
+            )
+            # gchat summary
+            send_gchat_webhook(f"Monthly Report {month_str}: {total_drives} drives, {total_applications} applications, {total_selected} selected")
+
+        db.session.commit()
+
+        # Update job status for frontend polling
+        if job:
+            job.status = 'completed'
+            job.file_path = report_path
+            job.completed_at = datetime.datetime.utcnow()
+            db.session.commit()
+
+        return {'status': 'success', 'report_path': report_path}
+    except Exception as e:
+        db.session.rollback()
+        if job:
+            try:
