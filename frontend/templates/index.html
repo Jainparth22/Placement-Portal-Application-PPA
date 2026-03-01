@@ -135,3 +135,14 @@
                                 :class="{'fw-bold':!n.is_read}" href="#"
                                 @click.prevent="markRead(n.id)">${n.message}<br><small
                                     class="text-muted">${formatDate(n.created_at)}</small></a></li>
+                    </ul>
+                </div>
+                <button class="btn btn-sm btn-outline-danger" @click="logout" title="Logout">
+                    <i class="bi bi-box-arrow-right"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content Wrapper -->
+        <div :class="isLoggedIn ? 'app-main' : ''">
+
