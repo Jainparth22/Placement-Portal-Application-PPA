@@ -221,3 +221,15 @@ def generate_monthly_report(job_id=None):
         db.session.rollback()
         if job:
             try:
+                job.status = 'failed'
+                db.session.commit()
+            except Exception:
+                pass
+        return {'status': 'error', 'message': str(e)}
+
+
+@celery.task(name='tasks.export_applications_csv')
+def export_applications_csv(user_id, student_id, job_id):
+    """Export student applications to CSV"""
+    job = None
+    try:
