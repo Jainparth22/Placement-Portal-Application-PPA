@@ -27,3 +27,10 @@ def admin_dashboard(user):
         'approved_drives': PlacementDrive.query.filter_by(status='approved').count(),
         'total_applications': Application.query.count(),
         'selected_students': Application.query.filter_by(status='selected').count(),
+        'active_students': User.query.filter_by(role='student', is_active=True).count(),
+        'blacklisted_users': User.query.filter_by(is_blacklisted=True).count(),
+        # Chart data: application status breakdown
+        'chart_app_status': {
+            'applied': Application.query.filter_by(status='applied').count(),
+            'shortlisted': Application.query.filter_by(status='shortlisted').count(),
+            'selected': Application.query.filter_by(status='selected').count(),
