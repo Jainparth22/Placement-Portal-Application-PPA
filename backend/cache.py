@@ -52,3 +52,15 @@ def cache_set(key, value, ttl=300):
     except Exception:
         return False
 
+
+def cache_delete(key):
+    r = get_redis()
+    if r is None:
+        return False
+    try:
+        r.delete(key)
+        return True
+    except Exception:
+        return False
+
+
