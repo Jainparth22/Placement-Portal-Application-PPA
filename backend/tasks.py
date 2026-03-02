@@ -239,3 +239,19 @@ def export_applications_csv(user_id, student_id, job_id):
             db.session.commit()
 
         applications = Application.query.filter_by(student_id=student_id).all()
+
+        exports_dir = os.path.join(os.path.dirname(__file__), 'exports')
+        os.makedirs(exports_dir, exist_ok=True)
+        file_path = os.path.join(exports_dir, f'applications_{student_id}_{datetime.datetime.utcnow().strftime("%Y%m%d_%H%M%S")}.csv')
+
+        with open(file_path, 'w', newline='', encoding='utf-8') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(['Student ID', 'Company Name', 'Drive Title', 'Application Status', 'Application Date', 'Remarks'])
+            for app in applications:
+                writer.writerow([
+                    student_id,
+                    app.drive.company.company_name if app.drive and app.drive.company else 'N/A',
+                    app.drive.drive_name if app.drive else 'N/A',
+                    app.status,
+                    app.application_date.strftime('%Y-%m-%d') if app.application_date else 'N/A',
+                    app.remarks or '',

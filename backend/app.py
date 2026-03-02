@@ -133,3 +133,13 @@ def create_app():
         return jsonify([n.to_dict() for n in notifications]), 200
 
     @app.route('/api/notifications/<int:id>/read', methods=['PUT'])
+    @login_required
+    def mark_notification_read(user, id):
+        notification = Notification.query.get_or_404(id)
+        if notification.user_id != user.id:
+            return jsonify({'error': 'Unauthorized'}), 403
+        notification.is_read = True
+        db.session.commit()
+        return jsonify({'message': 'Notification marked as read'}), 200
+
+    @app.route('/api/notifications/read-all', methods=['PUT'])
