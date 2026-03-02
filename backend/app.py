@@ -143,3 +143,15 @@ def create_app():
         return jsonify({'message': 'Notification marked as read'}), 200
 
     @app.route('/api/notifications/read-all', methods=['PUT'])
+    @login_required
+    def mark_all_read(user):
+        Notification.query.filter_by(user_id=user.id, is_read=False).update({'is_read': True})
+        db.session.commit()
+        return jsonify({'message': 'All notifications marked as read'}), 200
+
+    @app.route('/api/jobs/<int:job_id>', methods=['GET'])
+    @login_required
+    def get_job_status(user, job_id):
+        job = AsyncJob.query.get_or_404(job_id)
+        if job.user_id != user.id:
+            return jsonify({'error': 'Unauthorized'}), 403
