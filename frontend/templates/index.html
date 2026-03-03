@@ -146,3 +146,12 @@
         <!-- Main Content Wrapper -->
         <div :class="isLoggedIn ? 'app-main' : ''">
 
+            <!-- Alert -->
+            <div v-if="alert.show" class="alert-floating">
+                <div :class="'alert alert-'+alert.type+' alert-dismissible fade show'"><i
+                        :class="alert.type==='success'?'bi bi-check-circle':'bi bi-exclamation-triangle'"
+                        class="me-2"></i>${alert.message}<button type="button" class="btn-close"
+                        @click="alert.show=false"></button></div>
+            </div>
+
+            <!-- Loading -->
