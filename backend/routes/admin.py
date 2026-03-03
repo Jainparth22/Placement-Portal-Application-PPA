@@ -55,3 +55,18 @@ def admin_dashboard(user):
 def admin_search(user):
     q = request.args.get('q', '').strip()
     search_type = request.args.get('type', 'all')  # all, students, companies
+
+    results = {'students': [], 'companies': []}
+
+    if search_type in ('all', 'students'):
+        students = StudentProfile.query.filter(
+            (StudentProfile.full_name.ilike(f'%{q}%')) |
+            (StudentProfile.department.ilike(f'%{q}%'))
+        ).limit(20).all()
+        results['students'] = [s.to_dict() for s in students]
+
+    if search_type in ('all', 'companies'):
+        companies = CompanyProfile.query.filter(
+            (CompanyProfile.company_name.ilike(f'%{q}%')) |
+            (CompanyProfile.industry.ilike(f'%{q}%'))
+        ).limit(20).all()

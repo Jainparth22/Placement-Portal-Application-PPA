@@ -180,3 +180,11 @@ Key variables in `.env`:
 | `JWT_SECRET_KEY` | JWT signing secret |
 | `ADMIN_EMAIL` | Admin account email (auto-created) |
 | `ADMIN_PASSWORD` | Admin account password |
+| `REDIS_URL` | Redis connection URL |
+| `MAIL_USERNAME` | Gmail address for email notifications |
+| `MAIL_PASSWORD` | Gmail App Password (not your account password) |
+
+### 5. Run the Application
+
+**Terminal 1 — Flask web server:**
+```bash

@@ -277,3 +277,5 @@ def export_applications_csv(user_id, student_id, job_id):
     except Exception as e:
         if job:
             job.status = 'failed'
+            db.session.commit()
+        return {'status': 'error', 'message': str(e)}
