@@ -266,3 +266,14 @@ def export_applications_csv(user_id, student_id, job_id):
         # Notify user
         notification = Notification(
             user_id=user_id,
+            message='Your application export is ready for download.',
+            channel='in-app',
+            is_sent=True,
+        )
+        db.session.add(notification)
+        db.session.commit()
+
+        return {'status': 'success', 'file_path': file_path}
+    except Exception as e:
+        if job:
+            job.status = 'failed'

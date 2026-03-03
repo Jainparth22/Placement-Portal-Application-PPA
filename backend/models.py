@@ -268,3 +268,12 @@ class Notification(db.Model):
     message = db.Column(db.Text, nullable=False)
     channel = db.Column(db.String(20), default='in-app')  # in-app, email, webhook
     is_sent = db.Column(db.Boolean, default=False)
+    is_read = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'message': self.message,
+            'channel': self.channel,

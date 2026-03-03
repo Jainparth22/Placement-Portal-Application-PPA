@@ -45,3 +45,13 @@ def admin_dashboard(user):
             'closed': PlacementDrive.query.filter_by(status='closed').count(),
         },
     }
+    cache_set('admin_stats', stats, ttl=300)
+    return jsonify(stats), 200
+
+
+# search
+@admin_bp.route('/api/admin/search', methods=['GET'])
+@role_required('admin')
+def admin_search(user):
+    q = request.args.get('q', '').strip()
+    search_type = request.args.get('type', 'all')  # all, students, companies
