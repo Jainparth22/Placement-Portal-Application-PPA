@@ -155,3 +155,20 @@ def create_app():
         job = AsyncJob.query.get_or_404(job_id)
         if job.user_id != user.id:
             return jsonify({'error': 'Unauthorized'}), 403
+        return jsonify(job.to_dict()), 200
+
+    # serve frontend
+
+    @app.route('/')
+    def index():
+        return render_template('index.html')
+
+    @app.errorhandler(404)
+    def not_found(e):
+        if request.path.startswith('/api/'):
+            return jsonify({'error': 'Not found'}), 404
+        return render_template('index.html')
+
+    return app
+
+

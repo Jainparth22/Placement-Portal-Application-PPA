@@ -99,3 +99,23 @@ const app = createApp({
                 'admin-students': 'Students',
                 'admin-applications': 'Applications',
                 'admin-reports': 'Reports',
+                'company-drives': 'My Drives',
+                'company-profile': 'Company Profile',
+                'company-drive-applications': 'Drive Applications',
+                'student-drives': 'Browse Drives',
+                'student-drive-detail': 'Drive Details',
+                'student-applications': 'My Applications',
+                'student-interviews': 'Interviews',
+                'student-history': 'Placement History',
+                'student-profile': 'My Profile',
+            };
+            return titles[this.currentPage] || 'Placement Portal';
+        }
+    },
+    methods: {
+        // toggle dark/light
+        toggleTheme() {
+            this.darkMode = !this.darkMode;
+            document.documentElement.setAttribute('data-theme', this.darkMode ? 'dark' : 'light');
+            localStorage.setItem('ppa_darkmode', this.darkMode ? '1' : '0');
+        },
