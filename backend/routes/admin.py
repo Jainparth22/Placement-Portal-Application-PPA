@@ -34,3 +34,14 @@ def admin_dashboard(user):
             'applied': Application.query.filter_by(status='applied').count(),
             'shortlisted': Application.query.filter_by(status='shortlisted').count(),
             'selected': Application.query.filter_by(status='selected').count(),
+            'rejected': Application.query.filter_by(status='rejected').count(),
+            'withdrawn': Application.query.filter_by(status='withdrawn').count(),
+        },
+        # Chart data: drives by status
+        'chart_drive_status': {
+            'pending': PlacementDrive.query.filter_by(status='pending').count(),
+            'approved': PlacementDrive.query.filter_by(status='approved').count(),
+            'rejected': PlacementDrive.query.filter_by(status='rejected').count(),
+            'closed': PlacementDrive.query.filter_by(status='closed').count(),
+        },
+    }

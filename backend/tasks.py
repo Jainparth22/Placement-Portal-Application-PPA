@@ -255,3 +255,14 @@ def export_applications_csv(user_id, student_id, job_id):
                     app.status,
                     app.application_date.strftime('%Y-%m-%d') if app.application_date else 'N/A',
                     app.remarks or '',
+                ])
+
+        if job:
+            job.status = 'completed'
+            job.file_path = file_path
+            job.completed_at = datetime.datetime.utcnow()
+            db.session.commit()
+
+        # Notify user
+        notification = Notification(
+            user_id=user_id,
