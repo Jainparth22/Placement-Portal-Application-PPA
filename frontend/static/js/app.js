@@ -86,3 +86,16 @@ const app = createApp({
                 blacklisted_users: { label: 'Blacklisted', icon: 'bi bi-shield-x text-danger', class: '' },
             },
 
+
+        };
+    },
+    computed: {
+        pageTitle() {
+            const titles = {
+                'dashboard': 'Dashboard',
+                'admin-companies': 'Companies',
+                'admin-drives': 'Placement Drives',
+                'admin-drive-detail': 'Drive Details',
+                'admin-students': 'Students',
+                'admin-applications': 'Applications',
+                'admin-reports': 'Reports',
