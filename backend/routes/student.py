@@ -207,3 +207,18 @@ def browse_drives(user):
 def drive_detail(user, id):
     drive = PlacementDrive.query.get_or_404(id)
     student = StudentProfile.query.filter_by(user_id=user.id).first()
+
+    result = drive.to_dict()
+    # Check if already applied
+    if student:
+        existing = Application.query.filter_by(student_id=student.id, drive_id=id).first()
+        result['already_applied'] = existing is not None
+        result['application'] = existing.to_dict() if existing else None
+    return jsonify(result), 200
+
+
+# apply for drive
+@student_bp.route('/api/student/apply/<int:drive_id>', methods=['POST'])
+@role_required('student')
+def apply_for_drive(user, drive_id):
+    student = StudentProfile.query.filter_by(user_id=user.id).first()
