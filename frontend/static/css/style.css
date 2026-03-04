@@ -223,3 +223,14 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    max-width: 140px;
+}
+
+.sidebar-user-info .role-tag {
+    font-size: .6rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--primary-light);
+    letter-spacing: .5px;
+}
+

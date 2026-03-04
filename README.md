@@ -188,3 +188,10 @@ Key variables in `.env`:
 
 **Terminal 1 — Flask web server:**
 ```bash
+python run.py
+```
+App runs at: http://localhost:5001
+
+**Terminal 2 — Celery worker** (for background tasks):
+```bash
+cd backend
