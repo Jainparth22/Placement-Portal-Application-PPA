@@ -119,3 +119,15 @@ const app = createApp({
             document.documentElement.setAttribute('data-theme', this.darkMode ? 'dark' : 'light');
             localStorage.setItem('ppa_darkmode', this.darkMode ? '1' : '0');
         },
+
+        // api helper
+        async api(url, method = 'GET', body = null) {
+            const opts = {
+                method,
+                headers: {},
+            };
+            if (this.token) opts.headers['Authorization'] = `Bearer ${this.token}`;
+            if (body) {
+                opts.headers['Content-Type'] = 'application/json';
+                opts.body = JSON.stringify(body);
+            }
