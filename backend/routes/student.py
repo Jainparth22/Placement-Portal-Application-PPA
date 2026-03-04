@@ -195,3 +195,15 @@ def browse_drives(user):
 
     drives = query.order_by(PlacementDrive.application_deadline.asc()).all()
     result = [d.to_dict() for d in drives]
+
+    if not search and not branch and min_cgpa is None:
+        cache_set('approved_drives', result, ttl=600)
+
+    return jsonify(result), 200
+
+
+@student_bp.route('/api/student/drives/<int:id>', methods=['GET'])
+@role_required('student')
+def drive_detail(user, id):
+    drive = PlacementDrive.query.get_or_404(id)
+    student = StudentProfile.query.filter_by(user_id=user.id).first()

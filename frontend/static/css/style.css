@@ -234,3 +234,11 @@ body {
     letter-spacing: .5px;
 }
 
+/* ---- TOPBAR ---- */
+.app-topbar {
+    position: fixed;
+    top: 0;
+    left: var(--sidebar-width);
+    right: 0;
+    height: var(--topbar-height);
+    background: rgba(255, 255, 255, 0.75);
