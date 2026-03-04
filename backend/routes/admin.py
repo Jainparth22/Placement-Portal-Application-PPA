@@ -75,3 +75,14 @@ def admin_search(user):
     return jsonify(results), 200
 
 
+# company management
+@admin_bp.route('/api/admin/companies', methods=['GET'])
+@role_required('admin')
+def list_companies(user):
+    status_filter = request.args.get('status', None)
+    query = CompanyProfile.query
+    if status_filter:
+        query = query.filter_by(approval_status=status_filter)
+    companies = query.order_by(CompanyProfile.id.desc()).all()
+    return jsonify([c.to_dict() for c in companies]), 200
+
