@@ -70,3 +70,8 @@ def admin_search(user):
             (CompanyProfile.company_name.ilike(f'%{q}%')) |
             (CompanyProfile.industry.ilike(f'%{q}%'))
         ).limit(20).all()
+        results['companies'] = [c.to_dict() for c in companies]
+
+    return jsonify(results), 200
+
+

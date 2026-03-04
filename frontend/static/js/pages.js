@@ -41,3 +41,17 @@ const LoginPage = {
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>`,
+    data() {
+        return {
+            tab: 'login',
+            loginForm: { email: '', password: '' },
+            sForm: { full_name: '', email: '', password: '', department: '', cgpa: '', graduation_year: '', phone: '' },
+            cForm: { company_name: '', email: '', password: '', hr_name: '', hr_phone: '', website: '', industry: '', description: '' },
+            depts: ['CSE', 'ECE', 'EEE', 'ME', 'CE', 'IT', 'BT', 'CHE']
+        };
+    },
+    emits: ['login', 'register-student', 'register-company']
+};
