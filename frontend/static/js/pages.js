@@ -30,3 +30,14 @@ const LoginPage = {
                                 <div class="mb-3"><label class="form-label">Phone</label><input type="tel" class="form-control" v-model="sForm.phone"></div>
                                 <button type="submit" class="btn btn-success w-100"><i class="bi bi-person-plus me-1"></i>Register</button>
                             </form>
+                            <form v-if="tab==='reg-company'" @submit.prevent="$emit('register-company',cForm)">
+                                <div class="mb-3"><label class="form-label">Company Name *</label><input type="text" class="form-control" v-model="cForm.company_name" required></div>
+                                <div class="row"><div class="col-md-6 mb-3"><label class="form-label">Email *</label><input type="email" class="form-control" v-model="cForm.email" required></div><div class="col-md-6 mb-3"><label class="form-label">Password *</label><input type="password" class="form-control" v-model="cForm.password" required minlength="6"></div></div>
+                                <div class="row"><div class="col-md-6 mb-3"><label class="form-label">HR Name</label><input type="text" class="form-control" v-model="cForm.hr_name"></div><div class="col-md-6 mb-3"><label class="form-label">Industry</label><input type="text" class="form-control" v-model="cForm.industry"></div></div>
+                                <div class="row"><div class="col-md-6 mb-3"><label class="form-label">Website</label><input type="url" class="form-control" v-model="cForm.website"></div><div class="col-md-6 mb-3"><label class="form-label">HR Phone</label><input type="tel" class="form-control" v-model="cForm.hr_phone"></div></div>
+                                <div class="mb-3"><label class="form-label">Description</label><textarea class="form-control" v-model="cForm.description" rows="2"></textarea></div>
+                                <button type="submit" class="btn btn-primary w-100"><i class="bi bi-building-add me-1"></i>Register</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>

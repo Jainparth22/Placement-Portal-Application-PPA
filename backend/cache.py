@@ -64,3 +64,15 @@ def cache_delete(key):
         return False
 
 
+def cache_delete_pattern(pattern):
+    # used for invalidating related cache entries
+    r = get_redis()
+    if r is None:
+        return False
+    try:
+        keys = r.keys(pattern)
+        if keys:
+            r.delete(*keys)
+        return True
+    except Exception:
+        return False
