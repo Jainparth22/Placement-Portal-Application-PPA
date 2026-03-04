@@ -195,3 +195,21 @@ App runs at: http://localhost:5001
 **Terminal 2 — Celery worker** (for background tasks):
 ```bash
 cd backend
+celery -A celery_worker.celery worker --loglevel=info
+```
+
+**Terminal 3 — Celery beat** (for scheduled tasks):
+```bash
+cd backend
+celery -A celery_worker.celery beat --loglevel=info
+```
+
+### 6. First Login
+
+The admin account is auto-created on first run using `ADMIN_EMAIL` and `ADMIN_PASSWORD` from your `.env`.
+
+---
+
+## 🔌 API Documentation
+
+All endpoints use JSON. Protected endpoints require the `Authorization: Bearer <token>` header.
