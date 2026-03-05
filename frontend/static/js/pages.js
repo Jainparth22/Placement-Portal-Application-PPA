@@ -74,3 +74,20 @@ const AdminDashboard = {
         return {
             statCards: [
                 { key: 'total_students', icon: 'bi bi-people text-primary stat-icon', label: 'Students' },
+                { key: 'total_companies', icon: 'bi bi-building text-success stat-icon', label: 'Companies' },
+                { key: 'total_drives', icon: 'bi bi-briefcase text-warning stat-icon', label: 'Drives' },
+                { key: 'total_applications', icon: 'bi bi-file-earmark-text text-info stat-icon', label: 'Applications' }
+            ]
+        };
+    }
+};
+
+const AdminTable = {
+    props: ['title', 'icon', 'columns', 'items', 'searchable'],
+    emits: ['search', 'action'],
+    template: `
+    <div class="container-fluid py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="fw-bold"><i :class="icon" class="me-2"></i>{{title}}</h3>
+            <div v-if="searchable" class="input-group" style="max-width:300px;"><input type="text" class="form-control" placeholder="Search..." v-model="q" @input="$emit('search',q)"><button class="btn btn-outline-primary" @click="$emit('search',q)"><i class="bi bi-search"></i></button></div>
+            <slot name="filter"></slot>
