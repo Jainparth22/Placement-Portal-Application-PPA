@@ -213,3 +213,8 @@ The admin account is auto-created on first run using `ADMIN_EMAIL` and `ADMIN_PA
 ## 🔌 API Documentation
 
 All endpoints use JSON. Protected endpoints require the `Authorization: Bearer <token>` header.
+
+### Base URL
+```
+http://localhost:5001/api
+```

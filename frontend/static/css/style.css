@@ -250,3 +250,13 @@ body {
     justify-content: space-between;
     padding: 0 24px;
     z-index: 1030;
+    transition: left .25s ease, background .3s;
+}
+
+[data-theme="dark"] .app-topbar {
+    background: rgba(21, 30, 50, 0.85);
+}
+
+.topbar-left {
+    display: flex;
+    align-items: center;

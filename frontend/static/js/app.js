@@ -131,3 +131,13 @@ const app = createApp({
                 opts.headers['Content-Type'] = 'application/json';
                 opts.body = JSON.stringify(body);
             }
+
+            try {
+                const res = await fetch(API + url, opts);
+                const contentType = res.headers.get('content-type') || '';
+                if (!contentType.includes('application/json')) {
+                    if (!res.ok) {
+                        this.showAlert('Request failed (non-JSON response)', 'danger');
+                        return null;
+                    }
+                    // non-JSON success (shouldn't happen for API calls, but handle gracefully)
