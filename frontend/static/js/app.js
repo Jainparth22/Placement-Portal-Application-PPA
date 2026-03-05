@@ -148,3 +148,20 @@ const app = createApp({
                     data = await res.json();
                 } catch (parseErr) {
                     this.showAlert('Invalid response from server', 'danger');
+                    return null;
+                }
+                if (!res.ok) {
+                    this.showAlert(data.error || 'Request failed', 'danger');
+                    return null;
+                }
+                return data;
+            } catch (e) {
+                this.showAlert('Network error: ' + e.message, 'danger');
+                return null;
+            }
+        },
+
+        showAlert(message, type = 'success') {
+            this.alert = { show: true, type, message };
+            setTimeout(() => { this.alert.show = false; }, 4000);
+        },

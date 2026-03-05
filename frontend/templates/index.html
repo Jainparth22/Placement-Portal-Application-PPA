@@ -177,3 +177,20 @@
                 <div class="login-form-panel">
                     <div class="login-form-box">
                         <h2>Welcome back</h2>
+                        <p class="subtitle">Sign in or create a new account</p>
+                        <ul class="nav nav-pills nav-fill mb-4">
+                            <li class="nav-item"><a class="nav-link" :class="{active:loginTab==='login'}" href="#"
+                                    @click.prevent="loginTab='login'">Login</a></li>
+                            <li class="nav-item"><a class="nav-link" :class="{active:loginTab==='reg-s'}" href="#"
+                                    @click.prevent="loginTab='reg-s'">Student</a></li>
+                            <li class="nav-item"><a class="nav-link" :class="{active:loginTab==='reg-c'}" href="#"
+                                    @click.prevent="loginTab='reg-c'">Company</a></li>
+                        </ul>
+                        <form v-if="loginTab==='login'" @submit.prevent="doLogin" novalidate>
+                            <div class="mb-3"><label class="form-label">Email</label><input type="email"
+                                    class="form-control" v-model="loginForm.email" required>
+                                <div class="invalid-feedback">Enter a valid email</div>
+                            </div>
+                            <div class="mb-3"><label class="form-label">Password</label><input type="password"
+                                    class="form-control" v-model="loginForm.password" required minlength="6">
+                                <div class="invalid-feedback">Password is required (min 6 chars)</div>
