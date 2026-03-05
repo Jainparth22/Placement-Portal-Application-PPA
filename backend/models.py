@@ -289,3 +289,21 @@ class AsyncJob(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     job_type = db.Column(db.String(50), nullable=False)
     status = db.Column(db.String(20), default='pending')  # pending, running, completed, failed
+    file_path = db.Column(db.String(256))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    completed_at = db.Column(db.DateTime)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'job_type': self.job_type,
+            'status': self.status,
+            'file_path': self.file_path,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'completed_at': self.completed_at.isoformat() if self.completed_at else None,
+        }
+
+
+class Skill(db.Model):
+    __tablename__ = 'skills'

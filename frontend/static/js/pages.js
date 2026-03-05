@@ -55,3 +55,22 @@ const LoginPage = {
     },
     emits: ['login', 'register-student', 'register-company']
 };
+
+const AdminDashboard = {
+    props: ['stats', 'pendingCompanies', 'pendingDrives'],
+    emits: ['approve-company', 'reject-company', 'approve-drive', 'reject-drive'],
+    template: `
+    <div class="container-fluid py-4">
+        <h3 class="fw-bold mb-4"><i class="bi bi-speedometer2 me-2"></i>Admin Dashboard</h3>
+        <div class="row g-3 mb-4">
+            <div class="col-md-3" v-for="s in statCards" :key="s.key"><div class="card stat-card border-0 shadow-sm h-100"><div class="card-body text-center"><i :class="s.icon" class="stat-icon"></i><h2 class="fw-bold mb-0">{{stats[s.key]||0}}</h2><small class="text-muted">{{s.label}}</small></div></div></div>
+        </div>
+        <div class="row g-3">
+            <div class="col-md-6"><div class="card border-0 shadow-sm"><div class="card-header bg-warning-subtle"><i class="bi bi-building me-2"></i>Pending Companies</div><div class="card-body"><p v-if="!pendingCompanies.length" class="text-muted mb-0">None</p><div v-for="c in pendingCompanies" :key="c.id" class="d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded"><div><strong>{{c.company_name}}</strong><br><small class="text-muted">{{c.email}}</small></div><div><button class="btn btn-sm btn-success me-1" @click="$emit('approve-company',c.id)"><i class="bi bi-check"></i></button><button class="btn btn-sm btn-danger" @click="$emit('reject-company',c.id)"><i class="bi bi-x"></i></button></div></div></div></div></div>
+            <div class="col-md-6"><div class="card border-0 shadow-sm"><div class="card-header bg-info-subtle"><i class="bi bi-briefcase me-2"></i>Pending Drives</div><div class="card-body"><p v-if="!pendingDrives.length" class="text-muted mb-0">None</p><div v-for="d in pendingDrives" :key="d.id" class="d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded"><div><strong>{{d.drive_name}}</strong><br><small class="text-muted">{{d.company_name}}</small></div><div><button class="btn btn-sm btn-success me-1" @click="$emit('approve-drive',d.id)"><i class="bi bi-check"></i></button><button class="btn btn-sm btn-danger" @click="$emit('reject-drive',d.id)"><i class="bi bi-x"></i></button></div></div></div></div></div>
+        </div>
+    </div>`,
+    data() {
+        return {
+            statCards: [
+                { key: 'total_students', icon: 'bi bi-people text-primary stat-icon', label: 'Students' },
