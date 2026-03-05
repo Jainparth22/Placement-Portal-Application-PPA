@@ -218,3 +218,18 @@ All endpoints use JSON. Protected endpoints require the `Authorization: Bearer <
 ```
 http://localhost:5001/api
 ```
+
+---
+
+### 🔐 Authentication
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| `POST` | `/auth/login` | ❌ | Login — returns JWT token |
+| `POST` | `/auth/logout` | ✅ | Logout |
+| `GET` | `/auth/me` | ✅ | Get current user + profile |
+
+**Login Request:**
+```json
+POST /api/auth/login
+{

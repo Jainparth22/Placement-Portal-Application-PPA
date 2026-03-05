@@ -235,3 +235,13 @@ def create_drive(user):
     db.session.commit()
     cache_delete('admin_stats')
     return jsonify({'message': 'Drive created. Awaiting admin approval.', 'drive': drive.to_dict()}), 201
+
+
+@company_bp.route('/api/company/drives/<int:id>', methods=['PUT'])
+@role_required('company')
+def update_drive(user, id):
+    company = CompanyProfile.query.filter_by(user_id=user.id).first()
+    drive = PlacementDrive.query.get_or_404(id)
+    if drive.company_id != company.id:
+        return jsonify({'error': 'Unauthorized'}), 403
+    if drive.status in ('closed', 'rejected'):
