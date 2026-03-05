@@ -155,3 +155,20 @@
             </div>
 
             <!-- Loading -->
+            <div v-if="loading" class="text-center py-5">
+                <div class="spinner-border text-primary"><span class="visually-hidden">Loading...</span></div>
+            </div>
+
+            <!-- Login -->
+            <div v-if="currentPage==='login'&&!isLoggedIn" class="login-wrapper">
+                <div class="login-brand-panel">
+                    <h1><i class="bi bi-mortarboard-fill me-2"></i>Placement<br>Portal</h1>
+                    <p>A unified platform to manage campus recruitment &mdash; for students, companies, and
+                        administration.
+                    </p>
+                    <div class="login-brand-features">
+                        <div><i class="bi bi-briefcase"></i><span>Browse &amp; apply to placement drives</span></div>
+                        <div><i class="bi bi-building"></i><span>Company registration &amp; drive management</span>
+                        </div>
+                        <div><i class="bi bi-graph-up"></i><span>Admin dashboard with analytics</span></div>
+                        <div><i class="bi bi-file-earmark-check"></i><span>ATS resume checker integration</span></div>

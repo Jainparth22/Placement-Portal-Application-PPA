@@ -141,3 +141,10 @@ const app = createApp({
                         return null;
                     }
                     // non-JSON success (shouldn't happen for API calls, but handle gracefully)
+                    return { message: 'OK' };
+                }
+                let data;
+                try {
+                    data = await res.json();
+                } catch (parseErr) {
+                    this.showAlert('Invalid response from server', 'danger');
