@@ -222,3 +222,19 @@ def drive_detail(user, id):
 @role_required('student')
 def apply_for_drive(user, drive_id):
     student = StudentProfile.query.filter_by(user_id=user.id).first()
+    if not student:
+        return jsonify({'error': 'Student profile not found'}), 404
+
+    drive = PlacementDrive.query.get_or_404(drive_id)
+
+    if drive.status != 'approved':
+        return jsonify({'error': 'Drive is not currently accepting applications'}), 400
+
+    if drive.application_deadline and drive.application_deadline < datetime.utcnow():
+        return jsonify({'error': 'Application deadline has passed'}), 400
+
+    # eligibility
+    if drive.min_cgpa and student.cgpa < drive.min_cgpa:
+        return jsonify({'error': f'Minimum CGPA requirement is {drive.min_cgpa}. Your CGPA is {student.cgpa}.'}), 400
+
+    if drive.eligible_year and student.graduation_year and student.graduation_year != drive.eligible_year:

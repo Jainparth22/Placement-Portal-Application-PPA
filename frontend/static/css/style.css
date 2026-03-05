@@ -260,3 +260,23 @@ body {
 .topbar-left {
     display: flex;
     align-items: center;
+    gap: 12px;
+}
+
+.topbar-left h5 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: -0.2px;
+    color: var(--text);
+}
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-theme-toggle {
+    background: none;
+    border: 1px solid var(--border);
