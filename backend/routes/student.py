@@ -238,3 +238,8 @@ def apply_for_drive(user, drive_id):
         return jsonify({'error': f'Minimum CGPA requirement is {drive.min_cgpa}. Your CGPA is {student.cgpa}.'}), 400
 
     if drive.eligible_year and student.graduation_year and student.graduation_year != drive.eligible_year:
+        return jsonify({'error': f'This drive is for {drive.eligible_year} graduation year only.'}), 400
+
+    if drive.eligibility_branch and student.department:
+        eligible_branches = [b.strip().lower() for b in drive.eligibility_branch.split(',')]
+        if eligible_branches and 'all' not in eligible_branches:

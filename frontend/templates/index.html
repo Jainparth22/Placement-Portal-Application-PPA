@@ -212,3 +212,9 @@
                                     class="form-control" v-model="sRegForm.password" required minlength="6">
                                 <div class="invalid-feedback">Password must be at least 6 characters</div>
                             </div>
+                            <div class="row">
+                                <div class="col-4 mb-3"><label class="form-label">Department</label><select
+                                        class="form-select" v-model="sRegForm.department">
+                                        <option value="">Select</option>
+                                        <option v-for="d in departments" :value="d">${d}</option>
+                                    </select></div>
