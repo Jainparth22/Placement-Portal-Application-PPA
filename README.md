@@ -233,3 +233,20 @@ http://localhost:5001/api
 ```json
 POST /api/auth/login
 {
+  "email": "user@example.com",
+  "password": "yourpassword"
+}
+```
+
+**Login Response:**
+```json
+{
+  "message": "Login successful",
+  "token": "eyJ...",
+  "user": { "id": 1, "email": "...", "role": "student" },
+  "profile": { ... }
+}
+```
+
+---
+

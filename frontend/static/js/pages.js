@@ -91,3 +91,11 @@ const AdminTable = {
             <h3 class="fw-bold"><i :class="icon" class="me-2"></i>{{title}}</h3>
             <div v-if="searchable" class="input-group" style="max-width:300px;"><input type="text" class="form-control" placeholder="Search..." v-model="q" @input="$emit('search',q)"><button class="btn btn-outline-primary" @click="$emit('search',q)"><i class="bi bi-search"></i></button></div>
             <slot name="filter"></slot>
+        </div>
+        <div class="table-responsive"><table class="table table-hover align-middle"><thead class="table-dark"><tr><th v-for="c in columns" :key="c.key">{{c.label}}</th></tr></thead><tbody><slot name="rows"></slot><tr v-if="!items||!items.length"><td :colspan="columns.length" class="text-center text-muted">No data</td></tr></tbody></table></div>
+    </div>`,
+    data() { return { q: '' }; }
+};
+
+const DriveCard = {
+    props: ['drive'],
