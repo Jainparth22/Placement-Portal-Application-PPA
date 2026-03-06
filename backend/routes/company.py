@@ -262,3 +262,19 @@ def update_drive(user, id):
         drive.eligible_year = int(data['eligible_year'])
     if data.get('application_deadline'):
         try:
+            drive.application_deadline = datetime.fromisoformat(data['application_deadline'])
+        except ValueError:
+            pass
+    if data.get('location'):
+        drive.location = data['location']
+    if data.get('salary'):
+        drive.salary = data['salary']
+    if data.get('job_type'):
+        drive.job_type = data['job_type']
+
+    db.session.commit()
+    cache_delete('approved_drives')
+    return jsonify({'message': 'Drive updated', 'drive': drive.to_dict()}), 200
+
+
+@company_bp.route('/api/company/drives/<int:id>', methods=['DELETE'])
