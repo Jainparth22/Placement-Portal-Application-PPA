@@ -86,3 +86,14 @@ def list_companies(user):
     companies = query.order_by(CompanyProfile.id.desc()).all()
     return jsonify([c.to_dict() for c in companies]), 200
 
+
+@admin_bp.route('/api/admin/companies/pending', methods=['GET'])
+@role_required('admin')
+def pending_companies(user):
+    companies = CompanyProfile.query.filter_by(approval_status='pending').all()
+    return jsonify([c.to_dict() for c in companies]), 200
+
+
+@admin_bp.route('/api/admin/companies/<int:id>/approve', methods=['PUT'])
+@role_required('admin')
+def approve_company(user, id):
