@@ -245,3 +245,20 @@ def update_drive(user, id):
     if drive.company_id != company.id:
         return jsonify({'error': 'Unauthorized'}), 403
     if drive.status in ('closed', 'rejected'):
+        return jsonify({'error': 'Cannot edit a closed or rejected drive'}), 400
+
+    data = request.json
+    if data.get('drive_name'):
+        drive.drive_name = data['drive_name']
+    if data.get('job_title'):
+        drive.job_title = data['job_title']
+    if data.get('job_description'):
+        drive.job_description = data['job_description']
+    if data.get('eligibility_branch'):
+        drive.eligibility_branch = data['eligibility_branch']
+    if 'min_cgpa' in data:
+        drive.min_cgpa = float(data['min_cgpa'])
+    if data.get('eligible_year'):
+        drive.eligible_year = int(data['eligible_year'])
+    if data.get('application_deadline'):
+        try:

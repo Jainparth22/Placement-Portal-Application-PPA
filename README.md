@@ -250,3 +250,19 @@ POST /api/auth/login
 
 ---
 
+### 🎓 Student
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| `POST` | `/students/register` | ❌ | Register new student |
+| `GET` | `/students/profile` | ✅ Student | Get own profile |
+| `PUT` | `/students/profile` | ✅ Student | Update profile & skills |
+| `POST` | `/students/upload-resume` | ✅ Student | Upload resume (PDF/DOC/DOCX, max 5MB) |
+| `GET` | `/student/drives` | ✅ Student | Browse approved drives (`?search=&branch=`) |
+| `GET` | `/student/drives/<id>` | ✅ Student | Drive detail + applied status |
+| `POST` | `/student/apply/<drive_id>` | ✅ Student | Apply for a drive |
+| `GET` | `/student/applications` | ✅ Student | List all my applications |
+| `PUT` | `/student/applications/<id>/withdraw` | ✅ Student | Withdraw application |
+| `GET` | `/student/history` | ✅ Student | Placement history |
+| `GET` | `/student/interviews` | ✅ Student | My scheduled interviews |
+| `POST` | `/student/export-applications` | ✅ Student | Trigger async CSV export |
