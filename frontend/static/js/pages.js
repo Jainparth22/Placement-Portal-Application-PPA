@@ -99,3 +99,17 @@ const AdminTable = {
 
 const DriveCard = {
     props: ['drive'],
+    emits: ['apply'],
+    template: `
+    <div class="card border-0 shadow-sm drive-card h-100">
+        <div class="card-body">
+            <div class="d-flex justify-content-between"><h6 class="fw-bold">{{drive.drive_name}}</h6><span class="badge bg-success">{{drive.job_type||'Full-time'}}</span></div>
+            <p class="text-muted small mb-1"><i class="bi bi-building me-1"></i>{{drive.company_name}}</p>
+            <p class="text-muted small mb-1"><i class="bi bi-geo-alt me-1"></i>{{drive.location||'Remote'}} Â· <i class="bi bi-cash me-1"></i>{{drive.salary||'Not disclosed'}}</p>
+            <p class="text-muted small mb-2"><i class="bi bi-clock me-1"></i>Deadline: {{drive.application_deadline?new Date(drive.application_deadline).toLocaleDateString():'Open'}}</p>
+            <p class="small mb-2">Min CGPA: {{drive.min_cgpa||'None'}} Â· Branch: {{drive.eligibility_branch||'All'}}</p>
+            <button class="btn btn-sm btn-primary w-100" @click="$emit('apply',drive.id)"><i class="bi bi-send me-1"></i>Apply</button>
+        </div>
+    </div>`
+};
+
