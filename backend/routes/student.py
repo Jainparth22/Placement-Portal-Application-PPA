@@ -243,3 +243,17 @@ def apply_for_drive(user, drive_id):
     if drive.eligibility_branch and student.department:
         eligible_branches = [b.strip().lower() for b in drive.eligibility_branch.split(',')]
         if eligible_branches and 'all' not in eligible_branches:
+            if student.department.lower() not in eligible_branches:
+                return jsonify({'error': f'Your department "{student.department}" is not eligible for this drive.'}), 400
+
+    # check if already applied
+    existing = Application.query.filter_by(student_id=student.id, drive_id=drive_id).first()
+    if existing:
+        return jsonify({'error': 'You have already applied for this drive'}), 409
+
+    data = request.json or {}
+    application = Application(
+        student_id=student.id,
+        drive_id=drive_id,
+        status='applied',
+        cover_letter=data.get('cover_letter', ''),
