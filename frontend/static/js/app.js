@@ -171,3 +171,9 @@ const app = createApp({
             return new Date(d).toLocaleDateString() + ' ' + new Date(d).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         },
 
+        statusBadge(status) {
+            const m = { pending: 'badge bg-warning text-dark', approved: 'badge bg-success', rejected: 'badge bg-danger', closed: 'badge bg-secondary', applied: 'badge bg-primary', shortlisted: 'badge bg-info', selected: 'badge bg-success', withdrawn: 'badge bg-dark' };
+            return m[status] || 'badge bg-secondary';
+        },
+
+        // navigation
