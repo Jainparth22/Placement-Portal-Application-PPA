@@ -165,3 +165,9 @@ const app = createApp({
             this.alert = { show: true, type, message };
             setTimeout(() => { this.alert.show = false; }, 4000);
         },
+
+        formatDate(d) {
+            if (!d) return '-';
+            return new Date(d).toLocaleDateString() + ' ' + new Date(d).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        },
+

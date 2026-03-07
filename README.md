@@ -284,3 +284,16 @@ POST /api/students/register
   "skills": ["Python", "Vue.js", "SQL"]
 }
 ```
+
+**Apply for Drive:**
+```json
+POST /api/student/apply/3
+{
+  "cover_letter": "I am a strong fit for this role because..."
+}
+```
+
+---
+
+### 🏢 Company
+
