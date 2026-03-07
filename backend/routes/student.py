@@ -291,3 +291,14 @@ def withdraw_application(user, id):
     app = Application.query.get_or_404(id)
 
     if app.student_id != student.id:
+        return jsonify({'error': 'Unauthorized'}), 403
+
+    if app.status in ('selected', 'rejected'):
+        return jsonify({'error': 'Cannot withdraw a finalized application'}), 400
+
+    app.status = 'withdrawn'
+    db.session.commit()
+    return jsonify({'message': 'Application withdrawn', 'application': app.to_dict()}), 200
+
+
+# placement history

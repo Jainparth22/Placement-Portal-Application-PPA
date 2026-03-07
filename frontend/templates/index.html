@@ -270,3 +270,13 @@
 
             <!-- â•â•â• ADMIN DASHBOARD â•â•â• -->
             <div v-if="currentPage==='dashboard'&&user.role==='admin'" class="container-fluid py-4">
+                <h3 class="fw-bold mb-4"><i class="bi bi-speedometer2 me-2"></i>Admin Dashboard</h3>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-3" v-for="(s,k) in adminStatCards" :key="k">
+                        <div class="card stat-card border-0 shadow-sm h-100">
+                            <div class="card-body text-center"><i :class="s.icon" class="stat-icon"></i>
+                                <h2 class="fw-bold mb-0">${adminStats[k]||0}</h2><small
+                                    class="text-muted">${s.label}</small>
+                            </div>
+                        </div>
+                    </div>

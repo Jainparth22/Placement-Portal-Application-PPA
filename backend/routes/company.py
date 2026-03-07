@@ -283,3 +283,19 @@ def delete_drive(user, id):
     company = CompanyProfile.query.filter_by(user_id=user.id).first()
     drive = PlacementDrive.query.get_or_404(id)
     if drive.company_id != company.id:
+        return jsonify({'error': 'Unauthorized'}), 403
+    if drive.status == 'approved' and drive.applications.count() > 0:
+        return jsonify({'error': 'Cannot delete drive with existing applications'}), 400
+
+    db.session.delete(drive)
+    db.session.commit()
+    cache_delete('admin_stats')
+    cache_delete('approved_drives')
+    return jsonify({'message': 'Drive deleted'}), 200
+
+
+# application management
+@company_bp.route('/api/company/drives/<int:id>/applications', methods=['GET'])
+@role_required('company')
+def drive_applications(user, id):
+    company = CompanyProfile.query.filter_by(user_id=user.id).first()
