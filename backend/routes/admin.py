@@ -117,3 +117,18 @@ def reject_company(user, id):
     company.approval_status = 'rejected'
     data = request.get_json(silent=True)
     remarks = data.get('remarks', '') if data else ''
+    notification = Notification(
+        user_id=company.user_id,
+        message=f'Your company "{company.company_name}" registration was rejected. {remarks}',
+        channel='in-app', is_sent=True,
+    )
+    db.session.add(notification)
+    db.session.commit()
+    cache_delete('admin_stats')
+    return jsonify({'message': 'Company rejected', 'company': company.to_dict()}), 200
+
+
+@admin_bp.route('/api/admin/companies/<int:id>/blacklist', methods=['PUT'])
+@role_required('admin')
+def blacklist_company(user, id):
+    company = CompanyProfile.query.get_or_404(id)
