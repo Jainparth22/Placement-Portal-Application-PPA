@@ -278,3 +278,8 @@ def update_drive(user, id):
 
 
 @company_bp.route('/api/company/drives/<int:id>', methods=['DELETE'])
+@role_required('company')
+def delete_drive(user, id):
+    company = CompanyProfile.query.filter_by(user_id=user.id).first()
+    drive = PlacementDrive.query.get_or_404(id)
+    if drive.company_id != company.id:
