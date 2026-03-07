@@ -257,3 +257,23 @@ def apply_for_drive(user, drive_id):
         drive_id=drive_id,
         status='applied',
         cover_letter=data.get('cover_letter', ''),
+    )
+    db.session.add(application)
+
+    # notify
+    notification = Notification(
+        user_id=drive.company.user_id,
+        message=f'{student.full_name} applied for "{drive.drive_name}".',
+        channel='in-app', is_sent=True,
+    )
+    db.session.add(notification)
+    db.session.commit()
+
+    return jsonify({'message': 'Application submitted successfully', 'application': application.to_dict()}), 201
+
+
+# my applications
+@student_bp.route('/api/student/applications', methods=['GET'])
+@role_required('student')
+def my_applications(user):
+    student = StudentProfile.query.filter_by(user_id=user.id).first()

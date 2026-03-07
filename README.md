@@ -266,3 +266,21 @@ POST /api/auth/login
 | `GET` | `/student/history` | ✅ Student | Placement history |
 | `GET` | `/student/interviews` | ✅ Student | My scheduled interviews |
 | `POST` | `/student/export-applications` | ✅ Student | Trigger async CSV export |
+| `GET` | `/student/download-export/<job_id>` | ✅ Student | Download CSV when ready |
+| `POST` | `/student/ats-check` | ✅ Student | ATS resume check against a drive's JD |
+
+**Register Student:**
+```json
+POST /api/students/register
+{
+  "email": "student@college.edu",
+  "password": "Pass@123",
+  "full_name": "Parth Jain",
+  "department": "Computer Science",
+  "cgpa": 8.5,
+  "graduation_year": 2025,
+  "phone": "9876543210",
+  "bio": "Passionate about software development",
+  "skills": ["Python", "Vue.js", "SQL"]
+}
+```

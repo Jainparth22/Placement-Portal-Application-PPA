@@ -286,3 +286,23 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    color: var(--text-light);
+    transition: all .2s;
+}
+
+.btn-theme-toggle:hover {
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* ---- MAIN CONTENT ---- */
+.app-main {
+    margin-left: var(--sidebar-width);
+    margin-top: var(--topbar-height);
+    min-height: calc(100vh - var(--topbar-height));
+    padding: 24px;
+    transition: margin-left .25s;
+    animation: pageLoad .35s ease;
+}
+
