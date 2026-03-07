@@ -277,3 +277,17 @@ def apply_for_drive(user, drive_id):
 @role_required('student')
 def my_applications(user):
     student = StudentProfile.query.filter_by(user_id=user.id).first()
+    if not student:
+        return jsonify({'error': 'Student profile not found'}), 404
+
+    apps = Application.query.filter_by(student_id=student.id).order_by(Application.application_date.desc()).all()
+    return jsonify([a.to_dict() for a in apps]), 200
+
+
+@student_bp.route('/api/student/applications/<int:id>/withdraw', methods=['PUT'])
+@role_required('student')
+def withdraw_application(user, id):
+    student = StudentProfile.query.filter_by(user_id=user.id).first()
+    app = Application.query.get_or_404(id)
+
+    if app.student_id != student.id:
