@@ -132,3 +132,8 @@ def reject_company(user, id):
 @role_required('admin')
 def blacklist_company(user, id):
     company = CompanyProfile.query.get_or_404(id)
+    company_user = User.query.get(company.user_id)
+    data = request.get_json(silent=True)
+    action = data.get('action', 'blacklist') if data else 'blacklist'
+
+    if action == 'unblacklist':
