@@ -299,3 +299,19 @@ def delete_drive(user, id):
 @role_required('company')
 def drive_applications(user, id):
     company = CompanyProfile.query.filter_by(user_id=user.id).first()
+    drive = PlacementDrive.query.get_or_404(id)
+    if drive.company_id != company.id:
+        return jsonify({'error': 'Unauthorized'}), 403
+
+    apps = Application.query.filter_by(drive_id=id).order_by(Application.application_date.desc()).all()
+    return jsonify([a.to_dict() for a in apps]), 200
+
+
+@company_bp.route('/api/company/applications/<int:id>/status', methods=['PUT'])
+@role_required('company')
+def update_application_status(user, id):
+    app = Application.query.get_or_404(id)
+    company = CompanyProfile.query.filter_by(user_id=user.id).first()
+    drive = PlacementDrive.query.get(app.drive_id)
+
+    if not drive or drive.company_id != company.id:

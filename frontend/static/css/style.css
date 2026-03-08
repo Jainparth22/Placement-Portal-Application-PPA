@@ -306,3 +306,9 @@ body {
     animation: pageLoad .35s ease;
 }
 
+@keyframes pageLoad {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+

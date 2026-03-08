@@ -302,3 +302,22 @@ def withdraw_application(user, id):
 
 
 # placement history
+@student_bp.route('/api/student/history', methods=['GET'])
+@role_required('student')
+def placement_history(user):
+    student = StudentProfile.query.filter_by(user_id=user.id).first()
+    if not student:
+        return jsonify({'error': 'Student profile not found'}), 404
+
+    history = PlacementHistory.query.filter_by(student_id=student.id).order_by(PlacementHistory.selection_date.desc()).all()
+    return jsonify([h.to_dict() for h in history]), 200
+
+
+# my interviews
+@student_bp.route('/api/student/interviews', methods=['GET'])
+@role_required('student')
+def my_interviews(user):
+    student = StudentProfile.query.filter_by(user_id=user.id).first()
+    if not student:
+        return jsonify({'error': 'Student profile not found'}), 404
+
