@@ -297,3 +297,12 @@ POST /api/student/apply/3
 
 ### 🏢 Company
 
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| `POST` | `/companies/register` | ❌ | Register company |
+| `GET` | `/companies/profile` | ✅ Company | Get company profile |
+| `PUT` | `/companies/profile` | ✅ Company | Update profile |
+| `GET` | `/company/dashboard` | ✅ Company | Dashboard stats |
+| `GET` | `/company/drives` | ✅ Company | List my drives |
+| `POST` | `/company/drives` | ✅ Company | Create drive |
+| `PUT` | `/company/drives/<id>` | ✅ Company | Update drive |

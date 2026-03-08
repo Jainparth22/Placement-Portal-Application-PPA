@@ -177,3 +177,11 @@ const app = createApp({
         },
 
         // navigation
+        navigate(page) {
+            this.currentPage = page;
+            this.loadPageData(page);
+        },
+
+        // form validation
+        validateForm(event) {
+            const form = event.target;

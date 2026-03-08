@@ -137,3 +137,19 @@ def blacklist_company(user, id):
     action = data.get('action', 'blacklist') if data else 'blacklist'
 
     if action == 'unblacklist':
+        company_user.is_blacklisted = False
+        msg = f'Company "{company.company_name}" has been un-blacklisted.'
+    else:
+        company_user.is_blacklisted = True
+        msg = f'Company "{company.company_name}" has been blacklisted.'
+
+    db.session.commit()
+    cache_delete('admin_stats')
+    return jsonify({'message': msg, 'company': company.to_dict()}), 200
+
+
+# drive management
+@admin_bp.route('/api/admin/drives', methods=['GET'])
+@role_required('admin')
+def list_drives(user):
+    status_filter = request.args.get('status', None)
