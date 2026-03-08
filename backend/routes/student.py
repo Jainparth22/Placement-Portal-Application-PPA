@@ -321,3 +321,14 @@ def my_interviews(user):
     if not student:
         return jsonify({'error': 'Student profile not found'}), 404
 
+    from models import Interview
+    apps = Application.query.filter_by(student_id=student.id).all()
+    interviews = []
+    for app in apps:
+        for interview in app.interviews.all():
+            interviews.append({
+                **interview.to_dict(),
+                'drive_name': app.drive.drive_name if app.drive else None,
+                'company_name': app.drive.company.company_name if app.drive and app.drive.company else None,
+                'job_title': app.drive.job_title if app.drive else None,
+                'application_status': app.status,
