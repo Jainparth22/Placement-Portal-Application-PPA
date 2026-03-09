@@ -351,3 +351,20 @@ def export_applications(user):
         status='pending',
     )
     db.session.add(job)
+    db.session.commit()
+
+    from tasks import export_applications_csv
+    export_applications_csv.delay(user.id, student.id, job.id)
+
+    return jsonify({'message': 'Export job started', 'job_id': job.id}), 202
+
+
+# download export
+@student_bp.route('/api/student/download-export/<int:job_id>', methods=['GET'])
+@role_required('student')
+def download_export(user, job_id):
+    job = AsyncJob.query.get_or_404(job_id)
+    if job.user_id != user.id:
+        return jsonify({'error': 'Unauthorized'}), 403
+    if job.status != 'completed':
+        return jsonify({'error': 'Export not ready yet', 'status': job.status}), 400
