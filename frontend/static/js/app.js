@@ -202,3 +202,21 @@ const app = createApp({
             if (appCtx && this.adminStats.chart_app_status) {
                 if (this._appChart) this._appChart.destroy();
                 const d = this.adminStats.chart_app_status;
+                this._appChart = new Chart(appCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Applied', 'Shortlisted', 'Selected', 'Rejected', 'Withdrawn'],
+                        datasets: [{ data: [d.applied, d.shortlisted, d.selected, d.rejected, d.withdrawn], backgroundColor: ['#0d6efd', '#0dcaf0', '#198754', '#dc3545', '#6c757d'] }]
+                    },
+                    options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+                });
+            }
+            // Drive Status Bar
+            const driveCtx = document.getElementById('driveStatusChart');
+            if (driveCtx && this.adminStats.chart_drive_status) {
+                if (this._driveChart) this._driveChart.destroy();
+                const d = this.adminStats.chart_drive_status;
+                this._driveChart = new Chart(driveCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Pending', 'Approved', 'Rejected', 'Closed'],

@@ -332,3 +332,22 @@ def my_interviews(user):
                 'company_name': app.drive.company.company_name if app.drive and app.drive.company else None,
                 'job_title': app.drive.job_title if app.drive else None,
                 'application_status': app.status,
+            })
+    interviews.sort(key=lambda x: x.get('interview_date') or '', reverse=True)
+    return jsonify(interviews), 200
+
+
+# export csv (async)
+@student_bp.route('/api/student/export-applications', methods=['POST'])
+@role_required('student')
+def export_applications(user):
+    student = StudentProfile.query.filter_by(user_id=user.id).first()
+    if not student:
+        return jsonify({'error': 'Student profile not found'}), 404
+
+    job = AsyncJob(
+        user_id=user.id,
+        job_type='export_applications_csv',
+        status='pending',
+    )
+    db.session.add(job)

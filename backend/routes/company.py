@@ -328,3 +328,14 @@ def update_application_status(user, id):
     # If selected, create placement history
     if new_status == 'selected':
         from models import PlacementHistory
+        history = PlacementHistory(
+            student_id=app.student_id,
+            company_name=drive.company.company_name,
+            job_title=drive.job_title,
+            selection_date=datetime.utcnow(),
+            salary=drive.salary,
+            status='selected',
+        )
+        db.session.add(history)
+
+    # Notify student
