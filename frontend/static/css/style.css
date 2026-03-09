@@ -312,3 +312,19 @@ body {
         transform: translateY(8px);
     }
 
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ---- LOGIN (no sidebar) ---- */
+.login-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+.login-brand-panel {
+    flex: 0 0 42%;
+    background: radial-gradient(circle at top left, #047857, #064e3b 80%);
+    display: flex;

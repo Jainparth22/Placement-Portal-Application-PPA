@@ -306,3 +306,9 @@ POST /api/student/apply/3
 | `GET` | `/company/drives` | ✅ Company | List my drives |
 | `POST` | `/company/drives` | ✅ Company | Create drive |
 | `PUT` | `/company/drives/<id>` | ✅ Company | Update drive |
+| `DELETE` | `/company/drives/<id>` | ✅ Company | Delete drive |
+| `GET` | `/company/drives/<id>/applications` | ✅ Company | View applicants |
+| `PUT` | `/company/applications/<id>/status` | ✅ Company | Update status |
+| `POST` | `/company/applications/<id>/schedule-interview` | ✅ Company | Schedule interview |
+| `PUT` | `/company/applications/<id>/interview-result` | ✅ Company | Record result |
+| `GET` | `/company/drives/<id>/interviews` | ✅ Company | List interviews for drive |

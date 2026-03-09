@@ -315,3 +315,16 @@ def update_application_status(user, id):
     drive = PlacementDrive.query.get(app.drive_id)
 
     if not drive or drive.company_id != company.id:
+        return jsonify({'error': 'Unauthorized'}), 403
+
+    data = request.json
+    new_status = data.get('status', '').strip()
+    if new_status not in ('applied', 'shortlisted', 'selected', 'rejected'):
+        return jsonify({'error': 'Invalid status'}), 400
+
+    app.status = new_status
+    app.remarks = data.get('remarks', app.remarks)
+
+    # If selected, create placement history
+    if new_status == 'selected':
+        from models import PlacementHistory
