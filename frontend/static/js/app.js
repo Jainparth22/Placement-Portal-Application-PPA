@@ -185,3 +185,20 @@ const app = createApp({
         // form validation
         validateForm(event) {
             const form = event.target;
+            if (!form.checkValidity()) {
+                event.stopPropagation();
+                form.classList.add('was-validated');
+                return false;
+            }
+            form.classList.add('was-validated');
+            return true;
+        },
+
+        // chart rendering
+        renderAdminCharts() {
+            if (typeof Chart === 'undefined') return;
+            // Application Status Doughnut
+            const appCtx = document.getElementById('appStatusChart');
+            if (appCtx && this.adminStats.chart_app_status) {
+                if (this._appChart) this._appChart.destroy();
+                const d = this.adminStats.chart_app_status;
