@@ -280,3 +280,22 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-warning-subtle"><i class="bi bi-building me-2"></i>Pending
+                                Companies
+                            </div>
+                            <div class="card-body">
+                                <p v-if="!pendingCompanies.length" class="text-muted mb-0">None</p>
+                                <div v-for="c in pendingCompanies" :key="c.id"
+                                    class="d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded">
+                                    <div><strong>${c.company_name}</strong><br><small
+                                            class="text-muted">${c.email}</small>
+                                    </div>
+                                    <div><button class="btn btn-sm btn-success me-1" @click="approveCompany(c.id)"><i
+                                                class="bi bi-check"></i></button><button class="btn btn-sm btn-danger"
+                                            @click="rejectCompany(c.id)"><i class="bi bi-x"></i></button></div>
+                                </div>
+                            </div>

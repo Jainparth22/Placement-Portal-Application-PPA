@@ -153,3 +153,9 @@ def blacklist_company(user, id):
 @role_required('admin')
 def list_drives(user):
     status_filter = request.args.get('status', None)
+    query = PlacementDrive.query
+    if status_filter:
+        query = query.filter_by(status=status_filter)
+    drives = query.order_by(PlacementDrive.id.desc()).all()
+    return jsonify([d.to_dict() for d in drives]), 200
+
