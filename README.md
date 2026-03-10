@@ -312,3 +312,74 @@ POST /api/student/apply/3
 | `POST` | `/company/applications/<id>/schedule-interview` | ✅ Company | Schedule interview |
 | `PUT` | `/company/applications/<id>/interview-result` | ✅ Company | Record result |
 | `GET` | `/company/drives/<id>/interviews` | ✅ Company | List interviews for drive |
+
+**Create Drive:**
+```json
+POST /api/company/drives
+{
+  "drive_name": "SDE Campus Drive 2025",
+  "job_title": "Software Development Engineer",
+  "job_description": "Backend development role...",
+  "eligibility_branch": "Computer Science, Information Technology",
+  "min_cgpa": 7.0,
+  "eligible_year": 2025,
+  "application_deadline": "2025-08-31T23:59:00",
+  "location": "Bangalore",
+  "salary": "12 LPA",
+  "job_type": "Full-time"
+}
+```
+
+---
+
+### 👩‍💼 Admin
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| `GET` | `/admin/dashboard` | ✅ Admin | Stats + chart data |
+| `GET` | `/admin/search?q=&type=` | ✅ Admin | Search students/companies |
+| `GET` | `/admin/companies` | ✅ Admin | All companies (`?status=pending`) |
+| `GET` | `/admin/companies/pending` | ✅ Admin | Pending companies |
+| `PUT` | `/admin/companies/<id>/approve` | ✅ Admin | Approve company |
+| `PUT` | `/admin/companies/<id>/reject` | ✅ Admin | Reject company |
+| `PUT` | `/admin/companies/<id>/blacklist` | ✅ Admin | Blacklist / un-blacklist |
+| `GET` | `/admin/drives` | ✅ Admin | All drives (`?status=pending`) |
+| `GET` | `/admin/drives/pending` | ✅ Admin | Pending drives |
+| `PUT` | `/admin/drives/<id>/approve` | ✅ Admin | Approve drive |
+| `PUT` | `/admin/drives/<id>/reject` | ✅ Admin | Reject drive |
+| `PUT` | `/admin/drives/<id>/close` | ✅ Admin | Close drive |
+| `GET` | `/admin/students` | ✅ Admin | All students |
+| `PUT` | `/admin/students/<id>/deactivate` | ✅ Admin | Activate/deactivate |
+| `PUT` | `/admin/students/<id>/blacklist` | ✅ Admin | Blacklist / un-blacklist |
+| `GET` | `/admin/applications` | ✅ Admin | All applications (`?drive_id=&status=`) |
+| `GET` | `/admin/reports/monthly` | ✅ Admin | List monthly reports |
+| `POST` | `/admin/reports/generate` | ✅ Admin | Trigger async report |
+| `GET` | `/admin/reports/download/<id>?format=pdf` | ✅ Admin | Download report |
+
+---
+
+### 🔔 Notifications & Jobs
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| `GET` | `/notifications` | ✅ | Get notifications (last 50) |
+| `PUT` | `/notifications/<id>/read` | ✅ | Mark one as read |
+| `PUT` | `/notifications/read-all` | ✅ | Mark all as read |
+| `GET` | `/jobs/<job_id>` | ✅ | Poll async job status |
+
+**Job Status Response:**
+```json
+{
+  "id": 5,
+  "job_type": "export_applications_csv",
+  "status": "completed",
+  "file_path": "...",
+  "created_at": "2025-07-01T10:00:00",
+  "completed_at": "2025-07-01T10:00:05"
+}
+```
+
+---
+
+### ⚠️ Error Responses
+

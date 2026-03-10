@@ -339,3 +339,108 @@ def update_application_status(user, id):
         db.session.add(history)
 
     # Notify student
+    notification = Notification(
+        user_id=app.student.user_id,
+        message=f'Your application for "{drive.drive_name}" has been updated to: {new_status}.',
+        channel='in-app', is_sent=True,
+    )
+    db.session.add(notification)
+    db.session.commit()
+    return jsonify({'message': 'Application status updated', 'application': app.to_dict()}), 200
+
+
+# schedule interview
+@company_bp.route('/api/company/applications/<int:id>/schedule-interview', methods=['POST'])
+@role_required('company')
+def schedule_interview(user, id):
+    app = Application.query.get_or_404(id)
+    company = CompanyProfile.query.filter_by(user_id=user.id).first()
+    drive = PlacementDrive.query.get(app.drive_id)
+
+    if not drive or drive.company_id != company.id:
+        return jsonify({'error': 'Unauthorized'}), 403
+
+    data = request.json
+    interview_date = None
+    if data.get('interview_date'):
+        try:
+            interview_date = datetime.fromisoformat(data['interview_date'])
+        except ValueError:
+            return jsonify({'error': 'Invalid date format'}), 400
+
+    interview = Interview(
+        application_id=app.id,
+        interview_date=interview_date,
+        mode=data.get('mode', 'Online'),
+        venue=data.get('venue', ''),
+        result='pending',
+    )
+    db.session.add(interview)
+
+    app.status = 'shortlisted'
+    app.interview_type = data.get('mode', 'Online')
+
+    notification = Notification(
+        user_id=app.student.user_id,
+        message=f'Interview scheduled for "{drive.drive_name}" on {interview_date.strftime("%Y-%m-%d %H:%M") if interview_date else "TBD"}. Mode: {data.get("mode", "Online")}.',
+        channel='in-app', is_sent=True,
+    )
+    db.session.add(notification)
+    db.session.commit()
+    return jsonify({'message': 'Interview scheduled', 'interview': interview.to_dict()}), 201
+
+
+# update interview result
+@company_bp.route('/api/company/applications/<int:id>/interview-result', methods=['PUT'])
+@role_required('company')
+def update_interview_result(user, id):
+    app = Application.query.get_or_404(id)
+    company = CompanyProfile.query.filter_by(user_id=user.id).first()
+    drive = PlacementDrive.query.get(app.drive_id)
+
+    if not drive or drive.company_id != company.id:
+        return jsonify({'error': 'Unauthorized'}), 403
+
+    # Get the most recent interview for this application
+    interview = Interview.query.filter_by(application_id=app.id).order_by(Interview.id.desc()).first()
+    if not interview:
+        return jsonify({'error': 'No interview found for this application'}), 404
+
+    data = request.get_json(silent=True)
+    if not data or data.get('result') not in ('passed', 'failed'):
+        return jsonify({'error': 'Result must be "passed" or "failed"'}), 400
+
+    interview.result = data['result']
+
+    # Notify student
+    notification = Notification(
+        user_id=app.student.user_id,
+        message=f'Your interview for "{drive.drive_name}" result: {data["result"].upper()}.',
+        channel='in-app', is_sent=True,
+    )
+    db.session.add(notification)
+    db.session.commit()
+    return jsonify({'message': 'Interview result updated', 'interview': interview.to_dict()}), 200
+
+
+# drive interviews
+@company_bp.route('/api/company/drives/<int:id>/interviews', methods=['GET'])
+@role_required('company')
+def drive_interviews(user, id):
+    company = CompanyProfile.query.filter_by(user_id=user.id).first()
+    drive = PlacementDrive.query.get_or_404(id)
+    if drive.company_id != company.id:
+        return jsonify({'error': 'Unauthorized'}), 403
+
+    apps = Application.query.filter_by(drive_id=id).all()
+    result = []
+    for app in apps:
+        for interview in app.interviews.all():
+            result.append({
+                **interview.to_dict(),
+                'student_name': app.student.full_name if app.student else None,
+                'student_email': app.student.user.email if app.student and app.student.user else None,
+                'drive_name': drive.drive_name,
+            })
+    return jsonify(result), 200
+
