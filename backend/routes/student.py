@@ -368,3 +368,62 @@ def download_export(user, job_id):
         return jsonify({'error': 'Unauthorized'}), 403
     if job.status != 'completed':
         return jsonify({'error': 'Export not ready yet', 'status': job.status}), 400
+    if job.file_path and os.path.exists(job.file_path):
+        return send_file(job.file_path, as_attachment=True, download_name='my_applications.csv')
+    return jsonify({'error': 'Export file not found'}), 404
+
+
+# ats resume check
+@student_bp.route('/api/student/ats-check', methods=['POST'])
+@role_required('student')
+def ats_check(user):
+    try:
+        student = StudentProfile.query.filter_by(user_id=user.id).first()
+        if not student:
+            return jsonify({'error': 'Student profile not found'}), 404
+
+        data = request.get_json(silent=True)
+        drive_id = data.get('drive_id') if data else None
+        if not drive_id:
+            return jsonify({'error': 'drive_id is required'}), 400
+
+        drive = PlacementDrive.query.get(drive_id)
+        if not drive:
+            return jsonify({'error': 'Drive not found'}), 404
+
+        # build JD from drive info
+        job_desc = f"Job Title: {drive.job_title or ''}\n"
+        job_desc += f"Description: {drive.job_description or ''}\n"
+        job_desc += f"Required Branch: {drive.eligibility_branch or 'All'}\n"
+        job_desc += f"Min CGPA: {drive.min_cgpa or 'None'}"
+
+        # get text from resume pdf
+        resume_text = ""
+        if student.resume_path and os.path.exists(student.resume_path):
+            try:
+                import PyPDF2
+                with open(student.resume_path, 'rb') as f:
+                    reader = PyPDF2.PdfReader(f)
+                    for page in reader.pages:
+                        resume_text += page.extract_text() or ''
+            except Exception:
+                resume_text = ""
+
+        if not resume_text.strip():
+            # fallback if no pdf
+            resume_text = f"Name: {student.full_name}\n"
+            resume_text += f"Department: {student.department or ''}\n"
+            resume_text += f"CGPA: {student.cgpa or ''}\n"
+            resume_text += f"Skills: {', '.join([s.skill_name for s in student.skills]) if student.skills else ''}\n"
+            resume_text += f"Bio: {student.bio or ''}"
+
+        # call HF API
+        from gradio_client import Client
+        client = Client("parthjain/ResumeAnalyser")
+        result = client.predict(resume_text, job_desc, api_name="/analyze_resume")
+        return jsonify({'result': result, 'resume_preview': resume_text[:200] + '...'}), 200
+
+    except Exception as e:
+        return jsonify({'error': f'ATS check failed: {str(e)}. Please try again later.'}), 500
+
+
