@@ -426,3 +426,146 @@
                                         class="btn btn-sm btn-danger me-1"
                                         @click="rejectDrive(d.id)">Reject</button><button v-if="d.status==='approved'"
                                         class="btn btn-sm btn-warning" @click="closeDrive(d.id)">Close</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ═══ ADMIN DRIVE DETAIL ═══ -->
+            <div v-if="currentPage==='admin-drive-detail' && selectedAdminDrive" class="container-fluid py-4">
+                <button class="btn btn-outline-secondary mb-3" @click="navigate('admin-drives')">
+                    <i class="bi bi-arrow-left me-1"></i>Back to Drives
+                </button>
+                <h3 class="fw-bold mb-4"><i class="bi bi-briefcase me-2"></i>${selectedAdminDrive.drive_name}</h3>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header"><i class="bi bi-info-circle me-2"></i>Drive Details</div>
+                            <div class="card-body">
+                                <table class="table table-borderless mb-0">
+                                    <tr><td class="text-muted" style="width:140px;">Job Title</td><td><strong>${selectedAdminDrive.job_title}</strong></td></tr>
+                                    <tr><td class="text-muted">Company</td><td>${selectedAdminDrive.company_name}</td></tr>
+                                    <tr><td class="text-muted">Location</td><td>${selectedAdminDrive.location || 'Remote'}</td></tr>
+                                    <tr><td class="text-muted">Salary/CTC</td><td>${selectedAdminDrive.salary || 'N/A'}</td></tr>
+                                    <tr><td class="text-muted">Type</td><td>${selectedAdminDrive.job_type || 'Full-time'}</td></tr>
+                                    <tr><td class="text-muted">Branches</td><td>${selectedAdminDrive.eligibility_branch || 'All'}</td></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header"><i class="bi bi-bar-chart me-2"></i>Stats</div>
+                            <div class="card-body">
+                                <table class="table table-borderless mb-0">
+                                    <tr><td class="text-muted" style="width:140px;">Min CGPA</td><td><strong>${selectedAdminDrive.min_cgpa || 'None'}</strong></td></tr>
+                                    <tr><td class="text-muted">Deadline</td><td>${selectedAdminDrive.application_deadline ? formatDate(selectedAdminDrive.application_deadline) : 'N/A'}</td></tr>
+                                    <tr><td class="text-muted">Status</td><td><span :class="statusBadge(selectedAdminDrive.status)">${selectedAdminDrive.status}</span></td></tr>
+                                    <tr><td class="text-muted">Total Apps</td><td><span class="badge bg-info">${adminDriveApplications.length}</span></td></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="selectedAdminDrive.job_description" class="card border-0 shadow-sm mb-4">
+                    <div class="card-header"><i class="bi bi-file-text me-2"></i>Job Description</div>
+                    <div class="card-body">
+                        <p class="mb-0">${selectedAdminDrive.job_description}</p>
+                    </div>
+                </div>
+                <h5 class="fw-bold mb-3"><i class="bi bi-people me-2"></i>Applicants (${adminDriveApplications.length})</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Student</th>
+                                <th>Department</th>
+                                <th>CGPA</th>
+                                <th>Applied On</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="a in adminDriveApplications" :key="a.id">
+                                <td>${a.id}</td>
+                                <td><strong>${a.student_name}</strong><br><small class="text-muted">${a.student_email}</small></td>
+                                <td>${a.student_department || '-'}</td>
+                                <td>${a.student_cgpa || '-'}</td>
+                                <td>${formatDate(a.application_date)}</td>
+                                <td><span :class="statusBadge(a.status)">${a.status}</span></td>
+                            </tr>
+                            <tr v-if="!adminDriveApplications.length">
+                                <td colspan="6" class="text-center text-muted">No applications yet</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- â•â•â• ADMIN STUDENTS â•â•â• -->
+            <div v-if="currentPage==='admin-students'" class="container-fluid py-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="fw-bold"><i class="bi bi-people me-2"></i>Students</h3>
+                    <div class="input-group" style="max-width:300px;"><input type="text" class="form-control"
+                            placeholder="Search..." v-model="searchQuery" @input="searchAdmin('students')"><button
+                            class="btn btn-outline-primary"><i class="bi bi-search"></i></button></div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Dept</th>
+                                <th>CGPA</th>
+                                <th>Year</th>
+                                <th>Active</th>
+                                <th>Blacklisted</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="s in students" :key="s.id">
+                                <td>${s.id}</td>
+                                <td><strong>${s.full_name}</strong><br><small class="text-muted">${s.email}</small></td>
+                                <td>${s.department||'-'}</td>
+                                <td>${s.cgpa||'-'}</td>
+                                <td>${s.graduation_year||'-'}</td>
+                                <td><span
+                                        :class="s.is_active?'badge bg-success':'badge bg-secondary'">${s.is_active?'Yes':'No'}</span>
+                                </td>
+                                <td><span
+                                        :class="s.is_blacklisted?'badge bg-danger':'badge bg-success'">${s.is_blacklisted?'Yes':'No'}</span>
+                                </td>
+                                <td><button class="btn btn-sm btn-outline-warning me-1"
+                                        @click="toggleDeactivateStudent(s)">${s.is_active?'Deactivate':'Activate'}</button><button
+                                        class="btn btn-sm btn-outline-dark"
+                                        @click="toggleBlacklistStudent(s)">${s.is_blacklisted?'Unblacklist':'Blacklist'}</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- â•â•â• ADMIN APPLICATIONS â•â•â• -->
+            <div v-if="currentPage==='admin-applications'" class="container-fluid py-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="fw-bold"><i class="bi bi-file-earmark-text me-2"></i>All Applications</h3>
+                    <select class="form-select" style="max-width:200px;" v-model="adminAppStatusFilter"
+                        @change="loadAdminApplications">
+                        <option value="">All Statuses</option>
+                        <option value="applied">Applied</option>
+                        <option value="shortlisted">Shortlisted</option>
+                        <option value="selected">Selected</option>
+                        <option value="rejected">Rejected</option>
+                        <option value="withdrawn">Withdrawn</option>
+                    </select>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
