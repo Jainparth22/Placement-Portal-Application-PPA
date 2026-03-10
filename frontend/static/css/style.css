@@ -612,3 +612,74 @@ body {
 /* ---- BADGES ---- */
 .badge {
     font-weight: 500;
+    font-size: .75rem;
+    padding: 4px 10px;
+    border-radius: 6px;
+}
+
+/* ---- BUTTONS ---- */
+.btn {
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: .88rem;
+    transition: all .2s;
+}
+
+.btn-primary {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+.btn-success {
+    background: var(--success);
+    border-color: var(--success);
+}
+
+.btn-danger {
+    background: var(--danger);
+    border-color: var(--danger);
+}
+
+/* ---- FORMS ---- */
+.form-control,
+.form-select {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    padding: 10px 16px;
+    font-size: .9rem;
+    font-weight: 500;
+    background: var(--bg-card);
+    color: var(--text);
+    transition: border-color .2s, box-shadow .2s, background .2s;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+    outline: none;
+}
+
+.form-label {
+    font-weight: 600;
+    font-size: .85rem;
+    color: var(--text);
+    margin-bottom: 6px;
+    letter-spacing: -0.1px;
+}
+
+/* ---- MISC ---- */
+.spinner-border {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+/* mobile sidebar toggle */
+.sidebar-toggle {
+    display: none;
+    background: none;
