@@ -450,3 +450,97 @@ body {
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 12px;
+}
+
+.page-header h4 {
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ---- STAT CARDS ---- */
+.stat-card {
+    border-radius: var(--radius) !important;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: var(--bg-card);
+    box-shadow: var(--shadow-sm);
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+}
+
+.stat-card:nth-child(1)::before {
+    background: var(--primary);
+}
+
+.stat-card:nth-child(2)::before {
+    background: var(--success);
+}
+
+.stat-card:nth-child(3)::before {
+    background: var(--warning);
+}
+
+.stat-card:nth-child(4)::before {
+    background: var(--accent);
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+}
+
+.stat-icon {
+    font-size: 1.8rem;
+    margin-bottom: 6px;
+    display: block;
+}
+
+/* ---- DRIVE CARDS ---- */
+.drive-card {
+    border-radius: var(--radius) !important;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--primary) !important;
+    background: var(--bg-card);
+    box-shadow: var(--shadow-sm);
+    transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.drive-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* ---- TABLES ---- */
+.table {
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.table th {
+    font-weight: 600;
+    font-size: .8rem;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+}
+
+.table td {
+    vertical-align: middle;
+    font-size: .88rem;
+}
+
+.table-dark th {
+    background: var(--bg-sidebar);
+    border-color: #334155;
