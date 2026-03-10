@@ -220,3 +220,99 @@ const app = createApp({
                     type: 'bar',
                     data: {
                         labels: ['Pending', 'Approved', 'Rejected', 'Closed'],
+                        datasets: [{ label: 'Drives', data: [d.pending, d.approved, d.rejected, d.closed], backgroundColor: ['#ffc107', '#198754', '#dc3545', '#6c757d'] }]
+                    },
+                    options: { responsive: true, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }, plugins: { legend: { display: false } } }
+                });
+            }
+        },
+
+        async loadPageData(page) {
+            this.loading = true;
+            try {
+                if (page === 'dashboard') {
+                    if (this.user.role === 'admin') {
+                        const stats = await this.api('/api/admin/dashboard');
+                        if (stats) {
+                            this.adminStats = stats;
+                            this.$nextTick(() => this.renderAdminCharts());
+                        }
+                        const pc = await this.api('/api/admin/companies/pending');
+                        if (pc) this.pendingCompanies = pc;
+                        const pd = await this.api('/api/admin/drives/pending');
+                        if (pd) this.pendingDrives = pd;
+                    } else if (this.user.role === 'company') {
+                        const d = await this.api('/api/company/dashboard');
+                        if (d) { this.companyDashboard = d; this.companyProfile = d.company; }
+                    } else if (this.user.role === 'student') {
+                        await this.loadStudentDrives();
+                        await this.loadMyApplications();
+                    }
+                } else if (page === 'admin-companies') {
+                    const c = await this.api('/api/admin/companies');
+                    if (c) this.companies = c;
+                } else if (page === 'admin-drives') {
+                    await this.loadAdminDrives();
+                } else if (page === 'admin-students') {
+                    const s = await this.api('/api/admin/students');
+                    if (s) this.students = s;
+                } else if (page === 'admin-drive-detail') {
+                    // data loaded by viewAdminDriveDetail
+                } else if (page === 'admin-applications') {
+                    await this.loadAdminApplications();
+                } else if (page === 'admin-reports') {
+                    await this.loadReports();
+                } else if (page === 'company-drives') {
+                    await this.loadCompanyDrives();
+                } else if (page === 'company-profile') {
+                    const p = await this.api('/api/companies/profile');
+                    if (p) { this.companyProfile = p; this.companyProfileForm = { ...p }; }
+                } else if (page === 'student-drives') {
+                    await this.loadStudentDrives();
+                } else if (page === 'student-applications') {
+                    await this.loadMyApplications();
+                } else if (page === 'student-history') {
+                    const h = await this.api('/api/student/history');
+                    if (h) this.placementHistory = h;
+                } else if (page === 'student-interviews') {
+                    await this.loadMyInterviews();
+                } else if (page === 'student-profile') {
+                    const p = await this.api('/api/students/profile');
+                    if (p) { this.studentProfile = p; this.studentProfileForm = { ...p }; this.skillsInput = (p.skills || []).join(', '); }
+                }
+                await this.loadNotifications();
+            } finally {
+                this.loading = false;
+            }
+        },
+
+        // auth
+        async doLogin(event) {
+            const form = event.target;
+            if (!form.checkValidity()) { form.classList.add('was-validated'); return; }
+            this.loading = true;
+            const res = await this.api('/api/auth/login', 'POST', this.loginForm);
+            this.loading = false;
+            if (res) {
+                this.token = res.token;
+                this.user = res.user;
+                this.isLoggedIn = true;
+                localStorage.setItem('ppa_token', res.token);
+                localStorage.setItem('ppa_user', JSON.stringify(res.user));
+                if (res.profile) {
+                    if (res.user.role === 'company') this.companyProfile = res.profile;
+                    if (res.user.role === 'student') this.studentProfile = res.profile;
+                }
+                this.showAlert('Welcome back!', 'success');
+                this.navigate('dashboard');
+            }
+        },
+
+        async registerStudent(event) {
+            const form = event.target;
+            if (!form.checkValidity()) { form.classList.add('was-validated'); return; }
+            this.loading = true;
+            const res = await this.api('/api/students/register', 'POST', this.sRegForm);
+            this.loading = false;
+            if (res) {
+                this.showAlert('Registration successful! Please login.', 'success');
