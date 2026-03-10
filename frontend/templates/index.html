@@ -299,3 +299,130 @@
                                             @click="rejectCompany(c.id)"><i class="bi bi-x"></i></button></div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-info-subtle"><i class="bi bi-briefcase me-2"></i>Pending Drives
+                            </div>
+                            <div class="card-body">
+                                <p v-if="!pendingDrives.length" class="text-muted mb-0">None</p>
+                                <div v-for="d in pendingDrives" :key="d.id"
+                                    class="d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded">
+                                    <div><strong>${d.drive_name}</strong><br><small
+                                            class="text-muted">${d.company_name}</small>
+                                    </div>
+                                    <div><button class="btn btn-sm btn-success me-1" @click="approveDrive(d.id)"><i
+                                                class="bi bi-check"></i></button><button class="btn btn-sm btn-danger"
+                                            @click="rejectDrive(d.id)"><i class="bi bi-x"></i></button></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Charts -->
+                <div class="row g-3 mt-3">
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header"><i class="bi bi-pie-chart me-2"></i>Application Status Breakdown
+                            </div>
+                            <div class="card-body"><canvas id="appStatusChart" height="250"></canvas></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header"><i class="bi bi-bar-chart me-2"></i>Drives by Status</div>
+                            <div class="card-body"><canvas id="driveStatusChart" height="250"></canvas></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- â•â•â• ADMIN COMPANIES â•â•â• -->
+            <div v-if="currentPage==='admin-companies'" class="container-fluid py-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="fw-bold"><i class="bi bi-building me-2"></i>Companies</h3>
+                    <div class="input-group" style="max-width:300px;"><input type="text" class="form-control"
+                            placeholder="Search..." v-model="searchQuery" @input="searchAdmin('companies')"><button
+                            class="btn btn-outline-primary" @click="searchAdmin('companies')"><i
+                                class="bi bi-search"></i></button></div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Company</th>
+                                <th>HR</th>
+                                <th>Industry</th>
+                                <th>Status</th>
+                                <th>Blacklisted</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="c in companies" :key="c.id">
+                                <td>${c.id}</td>
+                                <td><strong>${c.company_name}</strong><br><small class="text-muted">${c.email}</small>
+                                </td>
+                                <td>${c.hr_name||'-'}</td>
+                                <td>${c.industry||'-'}</td>
+                                <td><span :class="statusBadge(c.approval_status)">${c.approval_status}</span></td>
+                                <td><span
+                                        :class="c.is_blacklisted?'badge bg-danger':'badge bg-success'">${c.is_blacklisted?'Yes':'No'}</span>
+                                </td>
+                                <td><button v-if="c.approval_status==='pending'" class="btn btn-sm btn-success me-1"
+                                        @click="approveCompany(c.id)">Approve</button><button
+                                        v-if="c.approval_status==='pending'" class="btn btn-sm btn-danger me-1"
+                                        @click="rejectCompany(c.id)">Reject</button><button
+                                        class="btn btn-sm btn-outline-dark"
+                                        @click="toggleBlacklistCompany(c)">${c.is_blacklisted?'Unblacklist':'Blacklist'}</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- â•â•â• ADMIN DRIVES â•â•â• -->
+            <div v-if="currentPage==='admin-drives'" class="container-fluid py-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="fw-bold"><i class="bi bi-briefcase me-2"></i>Drives</h3><select class="form-select"
+                        style="max-width:200px;" v-model="driveStatusFilter" @change="loadAdminDrives">
+                        <option value="">All</option>
+                        <option value="pending">Pending</option>
+                        <option value="approved">Approved</option>
+                        <option value="rejected">Rejected</option>
+                        <option value="closed">Closed</option>
+                    </select>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Drive</th>
+                                <th>Company</th>
+                                <th>Job</th>
+                                <th>Deadline</th>
+                                <th>CGPA</th>
+                                <th>Apps</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="d in adminDrives" :key="d.id">
+                                <td>${d.id}</td>
+                                <td><strong class="text-primary" style="cursor:pointer;" @click="viewAdminDriveDetail(d)">${d.drive_name}</strong></td>
+                                <td>${d.company_name}</td>
+                                <td>${d.job_title}</td>
+                                <td>${d.application_deadline?formatDate(d.application_deadline):'N/A'}</td>
+                                <td>${d.min_cgpa||'-'}</td>
+                                <td><span class="badge bg-info">${d.application_count}</span></td>
+                                <td><span :class="statusBadge(d.status)">${d.status}</span></td>
+                                <td><button v-if="d.status==='pending'" class="btn btn-sm btn-success me-1"
+                                        @click="approveDrive(d.id)">Approve</button><button v-if="d.status==='pending'"
+                                        class="btn btn-sm btn-danger me-1"
+                                        @click="rejectDrive(d.id)">Reject</button><button v-if="d.status==='approved'"
+                                        class="btn btn-sm btn-warning" @click="closeDrive(d.id)">Close</button></td>
