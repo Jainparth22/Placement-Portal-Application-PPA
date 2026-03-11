@@ -316,3 +316,8 @@ const app = createApp({
             this.loading = false;
             if (res) {
                 this.showAlert('Registration successful! Please login.', 'success');
+                this.loginTab = 'login';
+                this.currentPage = 'login';
+            }
+        },
+

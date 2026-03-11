@@ -183,3 +183,22 @@ def approve_drive(user, id):
         channel='in-app', is_sent=True,
     )
     db.session.add(approval)
+    db.session.add(notification)
+    db.session.commit()
+    cache_delete('admin_stats')
+    cache_delete('approved_drives')
+    return jsonify({'message': 'Drive approved', 'drive': drive.to_dict()}), 200
+
+
+@admin_bp.route('/api/admin/drives/<int:id>/reject', methods=['PUT'])
+@role_required('admin')
+def reject_drive(user, id):
+    drive = PlacementDrive.query.get_or_404(id)
+    drive.status = 'rejected'
+    data = request.get_json(silent=True)
+    remarks = data.get('remarks', '') if data else ''
+    approval = DriveApproval(
+        drive_id=drive.id, admin_id=user.id,
+        action='rejected', remarks=remarks,
+    )
+    notification = Notification(
