@@ -397,3 +397,22 @@ Common HTTP status codes:
 | `404` | Resource not found |
 | `409` | Conflict (duplicate email, already applied) |
 | `500` | Internal server error |
+
+---
+
+## 🗄️ Database Models
+
+| Model | Description |
+|---|---|
+| `User` | Core auth entity — email, password hash, role, active/blacklisted flags |
+| `StudentProfile` | Student details — CGPA, department, graduation year, resume path |
+| `CompanyProfile` | Company details — HR info, industry, approval status |
+| `PlacementDrive` | Job drive — title, eligibility, deadline, salary, status |
+| `Application` | Student ↔ Drive link — status, cover letter, remarks |
+| `Interview` | Interview details — date, mode, venue, result |
+| `PlacementHistory` | Record of selected students |
+| `DriveApproval` | Audit log of admin approve/reject actions |
+| `MonthlyReport` | Generated report metadata + file path |
+| `Notification` | In-app / email notifications per user |
+| `AsyncJob` | Background job tracker (pending → running → completed/failed) |
+| `Skill` | Student skills (many-per-student) |
