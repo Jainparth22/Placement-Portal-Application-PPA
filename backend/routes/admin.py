@@ -202,3 +202,21 @@ def reject_drive(user, id):
         action='rejected', remarks=remarks,
     )
     notification = Notification(
+        user_id=drive.company.user_id,
+        message=f'Your placement drive "{drive.drive_name}" was rejected. {remarks}',
+        channel='in-app', is_sent=True,
+    )
+    db.session.add(approval)
+    db.session.add(notification)
+    db.session.commit()
+    cache_delete('admin_stats')
+    return jsonify({'message': 'Drive rejected', 'drive': drive.to_dict()}), 200
+
+
+@admin_bp.route('/api/admin/drives/<int:id>/close', methods=['PUT'])
+@role_required('admin')
+def close_drive(user, id):
+    drive = PlacementDrive.query.get_or_404(id)
+    drive.status = 'closed'
+    db.session.commit()
+    cache_delete('admin_stats')
