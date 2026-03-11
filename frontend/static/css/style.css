@@ -699,3 +699,19 @@ body {
         transform: translateX(-100%);
     }
 
+    .app-sidebar.show {
+        transform: translateX(0);
+        box-shadow: 4px 0 20px rgba(0, 0, 0, .2);
+    }
+
+    .app-topbar {
+        left: 0;
+    }
+
+    .app-main {
+        margin-left: 0;
+    }
+
+    .sidebar-toggle {
+        display: flex;
+    }

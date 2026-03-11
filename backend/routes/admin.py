@@ -170,3 +170,16 @@ def pending_drives(user):
 @admin_bp.route('/api/admin/drives/<int:id>/approve', methods=['PUT'])
 @role_required('admin')
 def approve_drive(user, id):
+    drive = PlacementDrive.query.get_or_404(id)
+    drive.status = 'approved'
+    data = request.get_json(silent=True)
+    approval = DriveApproval(
+        drive_id=drive.id, admin_id=user.id,
+        action='approved', remarks=data.get('remarks', '') if data else '',
+    )
+    notification = Notification(
+        user_id=drive.company.user_id,
+        message=f'Your placement drive "{drive.drive_name}" has been approved!',
+        channel='in-app', is_sent=True,
+    )
+    db.session.add(approval)

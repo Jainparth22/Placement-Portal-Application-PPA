@@ -383,3 +383,17 @@ POST /api/company/drives
 
 ### ⚠️ Error Responses
 
+All errors return JSON:
+```json
+{ "error": "Human-readable error message" }
+```
+
+Common HTTP status codes:
+| Code | Meaning |
+|------|---------|
+| `400` | Bad request / validation error |
+| `401` | Authentication required |
+| `403` | Insufficient permissions / account blocked |
+| `404` | Resource not found |
+| `409` | Conflict (duplicate email, already applied) |
+| `500` | Internal server error |
