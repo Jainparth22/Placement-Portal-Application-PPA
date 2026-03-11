@@ -321,3 +321,12 @@ const app = createApp({
             }
         },
 
+        async registerCompany(event) {
+            const form = event.target;
+            if (!form.checkValidity()) { form.classList.add('was-validated'); return; }
+            this.loading = true;
+            const res = await this.api('/api/companies/register', 'POST', this.cRegForm);
+            this.loading = false;
+            if (res) {
+                this.showAlert('Company registered! Awaiting admin approval. Please login.', 'success');
+                this.loginTab = 'login';
