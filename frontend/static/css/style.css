@@ -683,3 +683,19 @@ body {
 .sidebar-toggle {
     display: none;
     background: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    width: 36px;
+    height: 36px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text);
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 992px) {
+    .app-sidebar {
+        transform: translateX(-100%);
+    }
+

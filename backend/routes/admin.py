@@ -159,3 +159,14 @@ def list_drives(user):
     drives = query.order_by(PlacementDrive.id.desc()).all()
     return jsonify([d.to_dict() for d in drives]), 200
 
+
+@admin_bp.route('/api/admin/drives/pending', methods=['GET'])
+@role_required('admin')
+def pending_drives(user):
+    drives = PlacementDrive.query.filter_by(status='pending').all()
+    return jsonify([d.to_dict() for d in drives]), 200
+
+
+@admin_bp.route('/api/admin/drives/<int:id>/approve', methods=['PUT'])
+@role_required('admin')
+def approve_drive(user, id):

@@ -569,3 +569,22 @@
                         <thead class="table-dark">
                             <tr>
                                 <th>ID</th>
+                                <th>Student</th>
+                                <th>Drive</th>
+                                <th>Company</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="a in adminApplications" :key="a.id">
+                                <td>${a.id}</td>
+                                <td><strong>${a.student_name}</strong><br><small
+                                        class="text-muted">${a.student_email}</small>
+                                </td>
+                                <td>${a.drive_name}</td>
+                                <td>${a.company_name}</td>
+                                <td>${formatDate(a.application_date)}</td>
+                                <td><span :class="statusBadge(a.status)">${a.status}</span></td>
+                            </tr>
+                            <tr v-if="!adminApplications.length">
