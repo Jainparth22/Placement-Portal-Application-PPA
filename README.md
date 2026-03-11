@@ -416,3 +416,10 @@ Common HTTP status codes:
 | `Notification` | In-app / email notifications per user |
 | `AsyncJob` | Background job tracker (pending → running → completed/failed) |
 | `Skill` | Student skills (many-per-student) |
+
+---
+
+## 📄 License
+
+This project was built for academic submission as part of the Application Development II course.
+
