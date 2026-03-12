@@ -344,3 +344,20 @@ const app = createApp({
             this.currentPage = 'login';
             this.showAlert('Logged out', 'info');
         },
+
+        // notifications
+        async loadNotifications() {
+            const n = await this.api('/api/notifications');
+            if (n) {
+                this.notifications = n;
+                this.unreadNotifications = n.filter(x => !x.is_read).length;
+            }
+        },
+        async markRead(id) {
+            await this.api(`/api/notifications/${id}/read`, 'PUT');
+            await this.loadNotifications();
+        },
+        async markAllRead() {
+            await this.api('/api/notifications/read-all', 'PUT');
+            await this.loadNotifications();
+        },

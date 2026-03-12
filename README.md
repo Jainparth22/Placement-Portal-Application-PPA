@@ -423,3 +423,6 @@ Common HTTP status codes:
 
 This project was built for academic submission as part of the Application Development II course.
 
+---
+
+*Built with Flask, Vue 3, SQLAlchemy, Celery, and Redis.*

@@ -230,3 +230,15 @@ def close_drive(user, id):
 def list_students(user):
     students = StudentProfile.query.order_by(StudentProfile.id.desc()).all()
     return jsonify([s.to_dict() for s in students]), 200
+
+
+@admin_bp.route('/api/admin/students/<int:id>/deactivate', methods=['PUT'])
+@role_required('admin')
+def deactivate_student(user, id):
+    student = StudentProfile.query.get_or_404(id)
+    student_user = User.query.get(student.user_id)
+    data = request.get_json(silent=True)
+    action = data.get('action', 'deactivate') if data else 'deactivate'
+
+    if action == 'activate':
+        student_user.is_active = True
