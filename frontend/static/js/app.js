@@ -330,3 +330,17 @@ const app = createApp({
             if (res) {
                 this.showAlert('Company registered! Awaiting admin approval. Please login.', 'success');
                 this.loginTab = 'login';
+                this.currentPage = 'login';
+            }
+        },
+
+        async logout() {
+            try { await this.api('/api/auth/logout', 'POST'); } catch (e) { /* ignore */ }
+            this.token = '';
+            this.user = {};
+            this.isLoggedIn = false;
+            localStorage.removeItem('ppa_token');
+            localStorage.removeItem('ppa_user');
+            this.currentPage = 'login';
+            this.showAlert('Logged out', 'info');
+        },

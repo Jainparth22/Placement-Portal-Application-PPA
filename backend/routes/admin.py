@@ -220,3 +220,13 @@ def close_drive(user, id):
     drive.status = 'closed'
     db.session.commit()
     cache_delete('admin_stats')
+    cache_delete('approved_drives')
+    return jsonify({'message': 'Drive closed', 'drive': drive.to_dict()}), 200
+
+
+# student management
+@admin_bp.route('/api/admin/students', methods=['GET'])
+@role_required('admin')
+def list_students(user):
+    students = StudentProfile.query.order_by(StudentProfile.id.desc()).all()
+    return jsonify([s.to_dict() for s in students]), 200
