@@ -361,3 +361,23 @@ const app = createApp({
             await this.api('/api/notifications/read-all', 'PUT');
             await this.loadNotifications();
         },
+
+        // admin actions
+        async approveCompany(id) {
+            const res = await this.api(`/api/admin/companies/${id}/approve`, 'PUT');
+            if (res) { this.showAlert('Company approved!', 'success'); this.loadPageData(this.currentPage); }
+        },
+        async rejectCompany(id) {
+            const res = await this.api(`/api/admin/companies/${id}/reject`, 'PUT', { remarks: 'Rejected by admin' });
+            if (res) { this.showAlert('Company rejected', 'warning'); this.loadPageData(this.currentPage); }
+        },
+        async toggleBlacklistCompany(c) {
+            const action = c.is_blacklisted ? 'unblacklist' : 'blacklist';
+            const res = await this.api(`/api/admin/companies/${c.id}/blacklist`, 'PUT', { action });
+            if (res) { this.showAlert(res.message, 'success'); this.loadPageData(this.currentPage); }
+        },
+        async approveDrive(id) {
+            const res = await this.api(`/api/admin/drives/${id}/approve`, 'PUT');
+            if (res) { this.showAlert('Drive approved!', 'success'); this.loadPageData(this.currentPage); }
+        },
+        async rejectDrive(id) {
