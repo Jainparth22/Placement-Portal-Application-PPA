@@ -242,3 +242,14 @@ def deactivate_student(user, id):
 
     if action == 'activate':
         student_user.is_active = True
+        msg = f'Student "{student.full_name}" has been activated.'
+    else:
+        student_user.is_active = False
+        msg = f'Student "{student.full_name}" has been deactivated.'
+
+    db.session.commit()
+    cache_delete('admin_stats')
+    return jsonify({'message': msg}), 200
+
+
+@admin_bp.route('/api/admin/students/<int:id>/blacklist', methods=['PUT'])

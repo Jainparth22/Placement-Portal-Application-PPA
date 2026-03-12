@@ -381,3 +381,8 @@ const app = createApp({
             if (res) { this.showAlert('Drive approved!', 'success'); this.loadPageData(this.currentPage); }
         },
         async rejectDrive(id) {
+            const res = await this.api(`/api/admin/drives/${id}/reject`, 'PUT', { remarks: 'Rejected by admin' });
+            if (res) { this.showAlert('Drive rejected', 'warning'); this.loadPageData(this.currentPage); }
+        },
+        async closeDrive(id) {
+            const res = await this.api(`/api/admin/drives/${id}/close`, 'PUT');
