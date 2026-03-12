@@ -732,3 +732,21 @@ body {
     }
 }
 
+@media (max-width: 576px) {
+    .app-main {
+        padding: 16px;
+    }
+
+    .stat-card .card-body {
+        padding: 12px;
+    }
+
+    .page-header h4 {
+        font-size: 1.1rem;
+    }
+}
+
+/* scrollbar */
+::-webkit-scrollbar {
+    width: 5px;
+}
