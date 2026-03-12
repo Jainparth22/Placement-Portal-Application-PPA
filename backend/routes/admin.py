@@ -253,3 +253,17 @@ def deactivate_student(user, id):
 
 
 @admin_bp.route('/api/admin/students/<int:id>/blacklist', methods=['PUT'])
+@role_required('admin')
+def blacklist_student(user, id):
+    student = StudentProfile.query.get_or_404(id)
+    student_user = User.query.get(student.user_id)
+    data = request.get_json(silent=True)
+    action = data.get('action', 'blacklist') if data else 'blacklist'
+
+    if action == 'unblacklist':
+        student_user.is_blacklisted = False
+        msg = f'Student "{student.full_name}" has been un-blacklisted.'
+    else:
+        student_user.is_blacklisted = True
+        msg = f'Student "{student.full_name}" has been blacklisted.'
+

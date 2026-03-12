@@ -386,3 +386,12 @@ const app = createApp({
         },
         async closeDrive(id) {
             const res = await this.api(`/api/admin/drives/${id}/close`, 'PUT');
+            if (res) { this.showAlert('Drive closed', 'info'); this.loadPageData(this.currentPage); }
+        },
+        async loadAdminDrives() {
+            const url = this.driveStatusFilter ? `/api/admin/drives?status=${this.driveStatusFilter}` : '/api/admin/drives';
+            const d = await this.api(url);
+            if (d) this.adminDrives = d;
+        },
+        async viewAdminDriveDetail(drive) {
+            this.selectedAdminDrive = drive;
