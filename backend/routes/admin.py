@@ -282,3 +282,17 @@ def list_applications(user):
     if drive_id:
         query = query.filter_by(drive_id=drive_id)
     if status_filter:
+        query = query.filter_by(status=status_filter)
+    apps = query.order_by(Application.application_date.desc()).all()
+    return jsonify([a.to_dict() for a in apps]), 200
+
+
+# reports
+@admin_bp.route('/api/admin/reports/monthly', methods=['GET'])
+@role_required('admin')
+def monthly_reports(user):
+    reports = MonthlyReport.query.order_by(MonthlyReport.id.desc()).all()
+    return jsonify([r.to_dict() for r in reports]), 200
+
+
+@admin_bp.route('/api/admin/reports/generate', methods=['POST'])

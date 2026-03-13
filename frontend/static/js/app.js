@@ -427,3 +427,19 @@ const app = createApp({
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
+                    window.URL.revokeObjectURL(url);
+                } else {
+                    this.showAlert('Report file not found', 'danger');
+                }
+            } catch (e) { this.showAlert('Download failed', 'danger'); }
+        },
+        async loadAdminApplications() {
+            let url = '/api/admin/applications';
+            if (this.adminAppStatusFilter) url += '?status=' + this.adminAppStatusFilter;
+            const a = await this.api(url);
+            if (a) this.adminApplications = a;
+        },
+        async searchAdmin(type) {
+            if (!this.searchQuery.trim()) { this.loadPageData(this.currentPage); return; }
+            const res = await this.api(`/api/admin/search?q=${encodeURIComponent(this.searchQuery)}&type=${type}`);
+            if (res) {
