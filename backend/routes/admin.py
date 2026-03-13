@@ -267,3 +267,18 @@ def blacklist_student(user, id):
         student_user.is_blacklisted = True
         msg = f'Student "{student.full_name}" has been blacklisted.'
 
+    db.session.commit()
+    cache_delete('admin_stats')
+    return jsonify({'message': msg}), 200
+
+
+# applications
+@admin_bp.route('/api/admin/applications', methods=['GET'])
+@role_required('admin')
+def list_applications(user):
+    drive_id = request.args.get('drive_id', None, type=int)
+    status_filter = request.args.get('status', None)
+    query = Application.query
+    if drive_id:
+        query = query.filter_by(drive_id=drive_id)
+    if status_filter:

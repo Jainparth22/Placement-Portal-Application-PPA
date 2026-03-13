@@ -408,3 +408,22 @@ const app = createApp({
             const action = s.is_blacklisted ? 'unblacklist' : 'blacklist';
             const res = await this.api(`/api/admin/students/${s.id}/blacklist`, 'PUT', { action });
             if (res) { this.showAlert(res.message, 'success'); this.loadPageData(this.currentPage); }
+        },
+        async loadReports() {
+            const r = await this.api('/api/admin/reports/monthly');
+            if (r) this.reports = r;
+        },
+        async downloadReport(id) {
+            try {
+                const resp = await fetch(`/api/admin/reports/download/${id}`, {
+                    headers: { 'Authorization': `Bearer ${this.token}` }
+                });
+                if (resp.ok) {
+                    const blob = await resp.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `report_${id}.pdf`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
