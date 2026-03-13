@@ -615,3 +615,17 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <tr v-for="r in reports" :key="r.id">
+                                <td>${r.id}</td>
+                                <td>${r.month}</td>
+                                <td>${r.total_drives}</td>
+                                <td>${r.total_applications}</td>
+                                <td>${r.total_selected}</td>
+                                <td>${formatDate(r.created_at)}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-danger me-1" @click="downloadReport(r.id)"
+                                        title="Download PDF"><i class="bi bi-file-earmark-pdf"></i> PDF</button>
+                                </td>
+                            </tr>
+                            <tr v-if="!reports.length">
+                                <td colspan="7" class="text-center text-muted">No reports</td>

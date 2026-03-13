@@ -395,3 +395,16 @@ const app = createApp({
         },
         async viewAdminDriveDetail(drive) {
             this.selectedAdminDrive = drive;
+            const apps = await this.api(`/api/admin/applications?drive_id=${drive.id}`);
+            if (apps) this.adminDriveApplications = apps;
+            this.currentPage = 'admin-drive-detail';
+        },
+        async toggleDeactivateStudent(s) {
+            const action = s.is_active ? 'deactivate' : 'activate';
+            const res = await this.api(`/api/admin/students/${s.id}/deactivate`, 'PUT', { action });
+            if (res) { this.showAlert(res.message, 'success'); this.loadPageData(this.currentPage); }
+        },
+        async toggleBlacklistStudent(s) {
+            const action = s.is_blacklisted ? 'unblacklist' : 'blacklist';
+            const res = await this.api(`/api/admin/students/${s.id}/blacklist`, 'PUT', { action });
+            if (res) { this.showAlert(res.message, 'success'); this.loadPageData(this.currentPage); }
