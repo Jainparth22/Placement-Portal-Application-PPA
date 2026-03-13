@@ -646,3 +646,12 @@
                     <div class="col-md-3">
                         <div class="card stat-card border-0 shadow-sm">
                             <div class="card-body text-center"><i class="bi bi-check-circle stat-icon text-success"></i>
+                                <h2 class="fw-bold">${companyProfile?companyProfile.approval_status:'-'}</h2><small
+                                    class="text-muted">Status</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stat-card border-0 shadow-sm">
+                            <div class="card-body text-center"><i class="bi bi-briefcase stat-icon text-primary"></i>
+                                <h2 class="fw-bold">${companyDashboard.total_drives||0}</h2><small

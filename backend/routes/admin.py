@@ -296,3 +296,12 @@ def monthly_reports(user):
 
 
 @admin_bp.route('/api/admin/reports/generate', methods=['POST'])
+@role_required('admin')
+def trigger_monthly_report(user):
+    from tasks import generate_monthly_report
+    job = AsyncJob(
+        user_id=user.id,
+        job_type='generate_monthly_report',
+        status='pending',
+    )
+    db.session.add(job)

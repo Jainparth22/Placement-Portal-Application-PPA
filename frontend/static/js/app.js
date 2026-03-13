@@ -443,3 +443,19 @@ const app = createApp({
             if (!this.searchQuery.trim()) { this.loadPageData(this.currentPage); return; }
             const res = await this.api(`/api/admin/search?q=${encodeURIComponent(this.searchQuery)}&type=${type}`);
             if (res) {
+                if (type === 'companies') this.companies = res.companies || [];
+                if (type === 'students') this.students = res.students || [];
+            }
+        },
+        async generateReport() {
+            const res = await this.api('/api/admin/reports/generate', 'POST');
+            if (res) {
+                this.showAlert('Report generation started! Will download when ready...', 'info');
+                if (res.job_id) {
+                    // poll the job for completion
+                    const pollReport = async () => {
+                        const job = await this.api(`/api/jobs/${res.job_id}`);
+                        if (job && job.status === 'completed') {
+                            this.showAlert('Report ready! Downloading...', 'success');
+                            await this.loadReports();
+                            await this.loadNotifications();
