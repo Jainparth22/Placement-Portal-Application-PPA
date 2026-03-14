@@ -468,3 +468,17 @@ const app = createApp({
                         } else {
                             this.showAlert('Report generation failed.', 'danger');
                         }
+                    };
+                    setTimeout(pollReport, 2000);
+                }
+            }
+        },
+
+        // company actions
+        async loadCompanyDrives() {
+            const d = await this.api('/api/company/drives');
+            if (d) this.companyDrives = d;
+        },
+        resetDriveForm() {
+            this.editingDriveId = null;
+            this.driveForm = { drive_name: '', job_title: '', job_description: '', eligibility_branch: '', min_cgpa: '', eligible_year: '', application_deadline: '', location: '', salary: '', job_type: 'Full-time' };
