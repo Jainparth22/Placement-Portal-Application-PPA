@@ -305,3 +305,12 @@ def trigger_monthly_report(user):
         status='pending',
     )
     db.session.add(job)
+    db.session.commit()
+    generate_monthly_report.delay(job.id)
+    return jsonify({'message': 'Monthly report generation started', 'job_id': job.id}), 202
+
+
+@admin_bp.route('/api/admin/reports/download/<int:id>', methods=['GET'])
+@role_required('admin')
+def download_report(user, id):
+    from flask import send_file

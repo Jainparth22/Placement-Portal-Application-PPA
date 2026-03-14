@@ -459,3 +459,12 @@ const app = createApp({
                             this.showAlert('Report ready! Downloading...', 'success');
                             await this.loadReports();
                             await this.loadNotifications();
+                            // download the latest report
+                            if (this.reports.length) {
+                                await this.downloadReport(this.reports[0].id);
+                            }
+                        } else if (job && job.status !== 'failed') {
+                            setTimeout(pollReport, 3000);
+                        } else {
+                            this.showAlert('Report generation failed.', 'danger');
+                        }
