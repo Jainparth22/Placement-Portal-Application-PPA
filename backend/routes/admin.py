@@ -314,3 +314,13 @@ def trigger_monthly_report(user):
 @role_required('admin')
 def download_report(user, id):
     from flask import send_file
+    report = MonthlyReport.query.get_or_404(id)
+    fmt = request.args.get('format', 'pdf')
+    if fmt == 'pdf':
+        pdf_path = report.report_path.replace('.html', '.pdf') if report.report_path else None
+        if pdf_path and os.path.exists(pdf_path):
+            return send_file(pdf_path, as_attachment=True, download_name=f'report_{report.month}.pdf')
+    if report.report_path and os.path.exists(report.report_path):
+        return send_file(report.report_path, as_attachment=True, download_name=f'report_{report.month}.html')
+    return jsonify({'error': 'Report file not found'}), 404
+
