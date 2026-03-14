@@ -482,3 +482,20 @@ const app = createApp({
         resetDriveForm() {
             this.editingDriveId = null;
             this.driveForm = { drive_name: '', job_title: '', job_description: '', eligibility_branch: '', min_cgpa: '', eligible_year: '', application_deadline: '', location: '', salary: '', job_type: 'Full-time' };
+        },
+        editDrive(drive) {
+            this.editingDriveId = drive.id;
+            this.driveForm = {
+                drive_name: drive.drive_name || '',
+                job_title: drive.job_title || '',
+                job_description: drive.job_description || '',
+                eligibility_branch: drive.eligibility_branch || '',
+                min_cgpa: drive.min_cgpa || '',
+                eligible_year: drive.eligible_year || '',
+                application_deadline: drive.application_deadline ? drive.application_deadline.slice(0, 16) : '',
+                location: drive.location || '',
+                salary: drive.salary || '',
+                job_type: drive.job_type || 'Full-time',
+            };
+            this.showDriveForm = true;
+        },

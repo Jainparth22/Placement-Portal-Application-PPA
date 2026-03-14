@@ -672,3 +672,20 @@
                     <div class="card-header"><i class="bi bi-list-ul me-2"></i>Drives</div>
                     <div class="card-body">
                         <div v-for="d in companyDashboard.drives_summary" :key="d.id"
+                            class="d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded">
+                            <div><strong>${d.drive_name}</strong> <span :class="statusBadge(d.status)"
+                                    class="ms-2">${d.status}</span></div><span class="badge bg-info">${d.applicants}
+                                apps</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- â•â•â• COMPANY DRIVES â•â•â• -->
+            <div v-if="currentPage==='company-drives'" class="container-fluid py-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="fw-bold"><i class="bi bi-briefcase me-2"></i>My Drives</h3><button
+                        v-if="companyProfile&&companyProfile.approval_status==='approved'" class="btn btn-primary"
+                        @click="resetDriveForm();showDriveForm=!showDriveForm"><i
+                            class="bi bi-plus-circle me-1"></i>Create
+                        Drive</button>
