@@ -529,3 +529,20 @@ const app = createApp({
             if (a) { this.driveApplications = a; this.currentPage = 'company-drive-applications'; }
         },
         async updateAppStatus(id, status) {
+            if (!status) return;
+            const res = await this.api(`/api/company/applications/${id}/status`, 'PUT', { status });
+            if (res) { this.showAlert('Status updated', 'success'); this.viewDriveApplications(this.driveApplications[0]?.drive_id); }
+        },
+        async updateCompanyProfile() {
+            this.loading = true;
+            const res = await this.api('/api/companies/profile', 'PUT', this.companyProfileForm);
+            this.loading = false;
+            if (res) { this.showAlert('Profile updated!', 'success'); this.companyProfile = res.company; }
+        },
+        scheduleInterview(appId) {
+            this.interviewAppId = appId;
+            this.interviewForm = { interview_date: '', mode: 'Online', venue: '' };
+            const modal = new bootstrap.Modal(document.getElementById('interviewModal'));
+            modal.show();
+        },
+        async submitInterview() {

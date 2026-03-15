@@ -721,3 +721,18 @@
                             </div>
                             <div class="row">
                                 <div class="col-4 mb-3"><label class="form-label">Location</label><input type="text"
+                                        class="form-control" v-model="driveForm.location"></div>
+                                <div class="col-4 mb-3"><label class="form-label">Salary/CTC</label><input type="text"
+                                        class="form-control" v-model="driveForm.salary" placeholder="8-12 LPA"></div>
+                                <div class="col-4 mb-3"><label class="form-label">Type</label><select
+                                        class="form-select" v-model="driveForm.job_type">
+                                        <option>Full-time</option>
+                                        <option>Internship</option>
+                                        <option>Contract</option>
+                                    </select></div>
+                            </div>
+                            <button type="submit" class="btn btn-success"><i
+                                    class="bi bi-check-circle me-1"></i>${editingDriveId?'Update':'Create'}</button><button
+                                type="button" class="btn btn-secondary ms-2"
+                                @click="showDriveForm=false;resetDriveForm()">Cancel</button>
+                        </form>
