@@ -512,3 +512,20 @@ const app = createApp({
                 this.showAlert(this.editingDriveId ? 'Drive updated!' : 'Drive created! Awaiting admin approval.', 'success');
                 this.showDriveForm = false;
                 this.resetDriveForm();
+                await this.loadCompanyDrives();
+            }
+        },
+        async deleteDrive(id) {
+            if (!confirm('Delete this drive?')) return;
+            const res = await this.api(`/api/company/drives/${id}`, 'DELETE');
+            if (res) { this.showAlert('Drive deleted', 'success'); await this.loadCompanyDrives(); }
+        },
+        async loadDriveInterviews(driveId) {
+            const interviews = await this.api(`/api/company/drives/${driveId}/interviews`);
+            if (interviews) { this.driveInterviews = interviews; }
+        },
+        async viewDriveApplications(id) {
+            const a = await this.api(`/api/company/drives/${id}/applications`);
+            if (a) { this.driveApplications = a; this.currentPage = 'company-drive-applications'; }
+        },
+        async updateAppStatus(id, status) {
