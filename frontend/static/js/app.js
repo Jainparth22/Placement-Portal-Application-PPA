@@ -546,3 +546,15 @@ const app = createApp({
             modal.show();
         },
         async submitInterview() {
+            const res = await this.api(`/api/company/applications/${this.interviewAppId}/schedule-interview`, 'POST', this.interviewForm);
+            if (res) {
+                this.showAlert('Interview scheduled!', 'success');
+                bootstrap.Modal.getInstance(document.getElementById('interviewModal')).hide();
+            }
+        },
+
+        // student actions
+        async loadStudentDrives() {
+            let url = '/api/student/drives';
+            const params = [];
+            if (this.driveSearch) params.push(`search=${encodeURIComponent(this.driveSearch)}`);

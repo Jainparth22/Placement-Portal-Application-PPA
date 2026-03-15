@@ -736,3 +736,8 @@
                                 type="button" class="btn btn-secondary ms-2"
                                 @click="showDriveForm=false;resetDriveForm()">Cancel</button>
                         </form>
+                    </div>
+                </div>
+                <!-- Drives List -->
+                <div v-for="d in companyDrives" :key="d.id" class="card border-0 shadow-sm mb-3">
+                    <div class="card-body">
