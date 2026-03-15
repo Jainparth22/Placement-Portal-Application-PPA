@@ -499,3 +499,16 @@ const app = createApp({
             };
             this.showDriveForm = true;
         },
+        async saveDrive() {
+            this.loading = true;
+            let res;
+            if (this.editingDriveId) {
+                res = await this.api(`/api/company/drives/${this.editingDriveId}`, 'PUT', this.driveForm);
+            } else {
+                res = await this.api('/api/company/drives', 'POST', this.driveForm);
+            }
+            this.loading = false;
+            if (res) {
+                this.showAlert(this.editingDriveId ? 'Drive updated!' : 'Drive created! Awaiting admin approval.', 'success');
+                this.showDriveForm = false;
+                this.resetDriveForm();

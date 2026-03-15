@@ -689,3 +689,22 @@
                         @click="resetDriveForm();showDriveForm=!showDriveForm"><i
                             class="bi bi-plus-circle me-1"></i>Create
                         Drive</button>
+                </div>
+                <!-- Create Form -->
+                <div v-if="showDriveForm" class="card border-0 shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5>${editingDriveId ? 'Edit' : 'Create'} Placement Drive</h5>
+                        <form @submit.prevent="saveDrive">
+                            <div class="row">
+                                <div class="col-6 mb-3"><label class="form-label">Drive Name *</label><input type="text"
+                                        class="form-control" v-model="driveForm.drive_name" required></div>
+                                <div class="col-6 mb-3"><label class="form-label">Job Title *</label><input type="text"
+                                        class="form-control" v-model="driveForm.job_title" required></div>
+                            </div>
+                            <div class="mb-3"><label class="form-label">Description</label><textarea
+                                    class="form-control" v-model="driveForm.job_description" rows="3"></textarea></div>
+                            <div class="row">
+                                <div class="col-3 mb-3"><label class="form-label">Branches</label><input type="text"
+                                        class="form-control" v-model="driveForm.eligibility_branch"
+                                        placeholder="CSE,ECE,All">
+                                </div>
