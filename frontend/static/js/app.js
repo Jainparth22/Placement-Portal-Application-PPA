@@ -587,3 +587,11 @@ const app = createApp({
             this.atsResult = null;
             this.atsLoading = true;
             const modal = new bootstrap.Modal(document.getElementById('atsModal'));
+            modal.show();
+            const res = await this.api('/api/student/ats-check', 'POST', { drive_id: driveId });
+            this.atsLoading = false;
+            if (res) {
+                this.atsResult = res.result;
+            }
+        },
+        async loadMyInterviews() {
