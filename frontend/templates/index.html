@@ -741,3 +741,10 @@
                 <!-- Drives List -->
                 <div v-for="d in companyDrives" :key="d.id" class="card border-0 shadow-sm mb-3">
                     <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h5 class="fw-bold mb-1">${d.drive_name} <span :class="statusBadge(d.status)"
+                                        class="ms-2">${d.status}</span></h5>
+                                <p class="text-muted mb-1">${d.job_title} · ${d.location||'Remote'} ·
+                                    ${d.salary||'N/A'}
+                                </p>
