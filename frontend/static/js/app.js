@@ -558,3 +558,12 @@ const app = createApp({
             let url = '/api/student/drives';
             const params = [];
             if (this.driveSearch) params.push(`search=${encodeURIComponent(this.driveSearch)}`);
+            if (this.branchFilter) params.push(`branch=${encodeURIComponent(this.branchFilter)}`);
+            if (params.length) url += '?' + params.join('&');
+            const d = await this.api(url);
+            if (d) this.approvedDrives = d;
+        },
+        async viewDriveDetail(id) {
+            const drive = await this.api(`/api/student/drives/${id}`);
+            if (drive) {
+                this.selectedDrive = drive;
