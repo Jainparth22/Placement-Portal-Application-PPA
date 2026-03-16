@@ -620,3 +620,12 @@ const app = createApp({
             if (!file) return;
             const fd = new FormData();
             fd.append('resume', file);
+            try {
+                const res = await fetch(API + '/api/students/upload-resume', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${this.token}` },
+                    body: fd,
+                });
+                const data = await res.json();
+                if (res.ok) this.showAlert('Resume uploaded!', 'success');
+                else this.showAlert(data.error || 'Upload failed', 'danger');
