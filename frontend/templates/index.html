@@ -756,3 +756,11 @@
                                     @click="viewDriveApplications(d.id)"><i
                                         class="bi bi-people me-1"></i>Apps</button><button
                                     class="btn btn-sm btn-outline-info me-1" @click="editDrive(d)"
+                                    v-if="d.status!=='closed'&&d.status!=='rejected'"><i
+                                        class="bi bi-pencil"></i></button><button
+                                    class="btn btn-sm btn-outline-secondary me-1" @click="loadDriveInterviews(d.id)"
+                                    title="View Interviews"><i class="bi bi-calendar-event"></i></button><button
+                                    class="btn btn-sm btn-outline-danger" @click="deleteDrive(d.id)"><i
+                                        class="bi bi-trash"></i></button></div>
+                        </div>
+                    </div>

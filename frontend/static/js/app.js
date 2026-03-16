@@ -595,3 +595,11 @@ const app = createApp({
             }
         },
         async loadMyInterviews() {
+            const i = await this.api('/api/student/interviews');
+            if (i) this.myInterviews = i;
+        },
+        async updateInterviewResult(id, result) {
+            const res = await this.api(`/api/company/applications/${id}/interview-result`, 'PUT', { result });
+            if (res) {
+                this.showAlert(`Interview marked as ${result}`, 'success');
+                if (this.driveApplications.length) {
