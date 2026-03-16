@@ -603,3 +603,20 @@ const app = createApp({
             if (res) {
                 this.showAlert(`Interview marked as ${result}`, 'success');
                 if (this.driveApplications.length) {
+                    this.viewDriveApplications(this.driveApplications[0]?.drive_id);
+                }
+            }
+        },
+        async updateStudentProfile() {
+            this.loading = true;
+            const data = { ...this.studentProfileForm };
+            if (this.skillsInput) data.skills = this.skillsInput.split(',').map(s => s.trim()).filter(Boolean);
+            const res = await this.api('/api/students/profile', 'PUT', data);
+            this.loading = false;
+            if (res) { this.showAlert('Profile updated!', 'success'); this.studentProfile = res.student; }
+        },
+        async uploadResume(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const fd = new FormData();
+            fd.append('resume', file);

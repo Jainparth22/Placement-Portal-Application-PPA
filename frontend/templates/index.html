@@ -764,3 +764,15 @@
                                         class="bi bi-trash"></i></button></div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- â•â•â• COMPANY: DRIVE APPLICATIONS â•â•â• -->
+
+            <!-- DRIVE INTERVIEWS PANEL -->
+            <div v-if="driveInterviews.length" class="container-fluid py-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-calendar-event me-2"></i>Scheduled Interviews</span>
+                        <button class="btn btn-sm btn-outline-secondary" @click="driveInterviews=[]"><i
+                                class="bi bi-x"></i> Close</button>
