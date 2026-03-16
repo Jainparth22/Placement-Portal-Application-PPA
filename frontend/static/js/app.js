@@ -567,3 +567,23 @@ const app = createApp({
             const drive = await this.api(`/api/student/drives/${id}`);
             if (drive) {
                 this.selectedDrive = drive;
+                this.currentPage = 'student-drive-detail';
+            }
+        },
+        async loadMyApplications() {
+            const a = await this.api('/api/student/applications');
+            if (a) this.myApplications = a;
+        },
+        async applyForDrive(driveId) {
+            const res = await this.api(`/api/student/apply/${driveId}`, 'POST', {});
+            if (res) { this.showAlert('Application submitted!', 'success'); await this.loadMyApplications(); await this.loadStudentDrives(); }
+        },
+        async withdrawApplication(id) {
+            if (!confirm('Withdraw this application?')) return;
+            const res = await this.api(`/api/student/applications/${id}/withdraw`, 'PUT');
+            if (res) { this.showAlert('Application withdrawn', 'info'); await this.loadMyApplications(); }
+        },
+        async checkATS(driveId) {
+            this.atsResult = null;
+            this.atsLoading = true;
+            const modal = new bootstrap.Modal(document.getElementById('atsModal'));
