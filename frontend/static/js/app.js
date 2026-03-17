@@ -662,3 +662,8 @@ const app = createApp({
                         }
                     } catch (e) { console.error('Download failed:', e); }
                 } else if (job && job.status !== 'failed') {
+                    setTimeout(poll, 3000);
+                } else {
+                    this.showAlert('Export failed. Please try again.', 'danger');
+                }
+            };

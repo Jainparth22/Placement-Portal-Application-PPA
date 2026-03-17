@@ -827,3 +827,15 @@
                             <tr v-for="a in driveApplications" :key="a.id">
                                 <td>${a.id}</td>
                                 <td><strong>${a.student_name}</strong><br><small>${a.student_email}</small></td>
+                                <td>${a.student_cgpa}</td>
+                                <td>${a.student_department}</td>
+                                <td>${formatDate(a.application_date)}</td>
+                                <td><span :class="statusBadge(a.status)">${a.status}</span></td>
+                                <td><select class="form-select form-select-sm d-inline-block" style="width:auto;"
+                                        @change="updateAppStatus(a.id,$event.target.value)">
+                                        <option value="">Change</option>
+                                        <option value="shortlisted">Shortlist</option>
+                                        <option value="selected">Select</option>
+                                        <option value="rejected">Reject</option>
+                                    </select><button class="btn btn-sm btn-outline-info ms-1"
+                                        @click="scheduleInterview(a.id)"><i
