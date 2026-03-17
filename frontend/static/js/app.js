@@ -650,3 +650,15 @@ const app = createApp({
                             headers: { 'Authorization': `Bearer ${this.token}` }
                         });
                         if (resp.ok) {
+                            const blob = await resp.blob();
+                            const url = window.URL.createObjectURL(blob);
+                            const link = document.createElement('a');
+                            link.href = url;
+                            link.download = 'my_applications.csv';
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                            window.URL.revokeObjectURL(url);
+                        }
+                    } catch (e) { console.error('Download failed:', e); }
+                } else if (job && job.status !== 'failed') {
