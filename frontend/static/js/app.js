@@ -684,3 +684,16 @@ const app = createApp({
                     localStorage.setItem('ppa_user', JSON.stringify(res.user));
                     this.isLoggedIn = true;
                     this.navigate('dashboard');
+                } else {
+                    // token expired or invalid
+                    this.token = '';
+                    localStorage.removeItem('ppa_token');
+                    localStorage.removeItem('ppa_user');
+                }
+            } catch (e) {
+                this.isLoggedIn = true;
+                this.navigate('dashboard');
+            }
+        }
+    }
+});
