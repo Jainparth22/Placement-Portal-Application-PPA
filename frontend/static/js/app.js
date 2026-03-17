@@ -629,3 +629,14 @@ const app = createApp({
                 const data = await res.json();
                 if (res.ok) this.showAlert('Resume uploaded!', 'success');
                 else this.showAlert(data.error || 'Upload failed', 'danger');
+            } catch (e) { this.showAlert('Upload error', 'danger'); }
+        },
+        async exportCSV() {
+            const res = await this.api('/api/student/export-applications', 'POST');
+            if (res) {
+                this.showAlert('Export started! You will be notified when ready.', 'info');
+                if (res.job_id) this.pollJob(res.job_id);
+            }
+        },
+        async pollJob(jobId) {
+            const poll = async () => {
