@@ -839,3 +839,10 @@
                                         <option value="rejected">Reject</option>
                                     </select><button class="btn btn-sm btn-outline-info ms-1"
                                         @click="scheduleInterview(a.id)"><i
+                                            class="bi bi-calendar-event"></i></button><button
+                                        class="btn btn-sm btn-outline-success ms-1"
+                                        @click="updateInterviewResult(a.id, 'passed')" title="Interview Passed"><i
+                                            class="bi bi-check-circle"></i></button><button
+                                        class="btn btn-sm btn-outline-danger ms-1"
+                                        @click="updateInterviewResult(a.id, 'failed')" title="Interview Failed"><i
+                                            class="bi bi-x-circle"></i></button></td>

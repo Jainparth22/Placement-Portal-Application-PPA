@@ -667,3 +667,20 @@ const app = createApp({
                     this.showAlert('Export failed. Please try again.', 'danger');
                 }
             };
+            setTimeout(poll, 2000);
+        },
+    },
+    async mounted() {
+        // restore dark mode
+        if (this.darkMode) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+        if (this.token && this.user.id) {
+            // verify token is still valid
+            try {
+                const res = await this.api('/api/auth/me');
+                if (res && res.user) {
+                    this.user = res.user;
+                    localStorage.setItem('ppa_user', JSON.stringify(res.user));
+                    this.isLoggedIn = true;
+                    this.navigate('dashboard');
