@@ -789,3 +789,11 @@
                                         <th>Result</th>
                                     </tr>
                                 </thead>
+                                <tbody>
+                                    <tr v-for="iv in driveInterviews" :key="iv.id">
+                                        <td>${iv.student_name||'N/A'}</td>
+                                        <td>${iv.interview_date?formatDate(iv.interview_date):'TBD'}</td>
+                                        <td>${iv.mode||'N/A'}</td>
+                                        <td>${iv.venue||'N/A'}</td>
+                                        <td><span
+                                                :class="statusBadge(iv.result||'pending')">${iv.result||'pending'}</span>
