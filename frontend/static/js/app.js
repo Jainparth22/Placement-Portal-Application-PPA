@@ -640,3 +640,13 @@ const app = createApp({
         },
         async pollJob(jobId) {
             const poll = async () => {
+                const job = await this.api(`/api/jobs/${jobId}`);
+                if (job && job.status === 'completed') {
+                    this.showAlert('Export ready! Downloading...', 'success');
+                    await this.loadNotifications();
+                    // trigger browser download with auth token
+                    try {
+                        const resp = await fetch(`/api/student/download-export/${jobId}`, {
+                            headers: { 'Authorization': `Bearer ${this.token}` }
+                        });
+                        if (resp.ok) {
