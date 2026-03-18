@@ -914,3 +914,12 @@
                     <div class="col-md-3">
                         <div class="card stat-card border-0 shadow-sm">
                             <div class="card-body text-center"><i class="bi bi-trophy stat-icon text-warning"></i>
+                                <h2 class="fw-bold">${myApplications.filter(a=>a.status==='selected').length}</h2><small
+                                    class="text-muted">Selections</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stat-card border-0 shadow-sm">
+                            <div class="card-body text-center"><i class="bi bi-download stat-icon text-info"></i><button
+                                    class="btn btn-sm btn-outline-primary mt-1" @click="exportCSV"><i
