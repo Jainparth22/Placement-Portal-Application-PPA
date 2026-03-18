@@ -923,3 +923,15 @@
                         <div class="card stat-card border-0 shadow-sm">
                             <div class="card-body text-center"><i class="bi bi-download stat-icon text-info"></i><button
                                     class="btn btn-sm btn-outline-primary mt-1" @click="exportCSV"><i
+                                        class="bi bi-filetype-csv me-1"></i>Export CSV</button><br><small
+                                    class="text-muted">Export Data</small></div>
+                        </div>
+                    </div>
+                </div>
+                <h5 class="fw-bold mb-3">Latest Drives</h5>
+                <div class="row g-3">
+                    <div v-for="d in approvedDrives.slice(0,6)" :key="d.id" class="col-md-4">
+                        <div class="card border-0 shadow-sm drive-card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="fw-bold">${d.drive_name}</h6><span
