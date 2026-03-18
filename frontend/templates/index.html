@@ -861,3 +861,16 @@
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
                         <form @submit.prevent="updateCompanyProfile">
+                            <div class="row">
+                                <div class="col-6 mb-3"><label class="form-label">Company Name</label><input type="text"
+                                        class="form-control" v-model="companyProfileForm.company_name"></div>
+                                <div class="col-6 mb-3"><label class="form-label">Industry</label><input type="text"
+                                        class="form-control" v-model="companyProfileForm.industry"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 mb-3"><label class="form-label">HR Name</label><input type="text"
+                                        class="form-control" v-model="companyProfileForm.hr_name"></div>
+                                <div class="col-4 mb-3"><label class="form-label">HR Email</label><input type="email"
+                                        class="form-control" v-model="companyProfileForm.hr_email"></div>
+                                <div class="col-4 mb-3"><label class="form-label">HR Phone</label><input type="tel"
+                                        class="form-control" v-model="companyProfileForm.hr_phone"></div>
