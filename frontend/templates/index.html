@@ -889,3 +889,16 @@
                     </div>
                 </div>
             </div>
+
+            <!-- â•â•â• STUDENT DASHBOARD â•â•â• -->
+            <div v-if="currentPage==='dashboard'&&user.role==='student'" class="container-fluid py-4">
+                <h3 class="fw-bold mb-4"><i class="bi bi-person-circle me-2"></i>Student Dashboard</h3>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-3">
+                        <div class="card stat-card border-0 shadow-sm">
+                            <div class="card-body text-center"><i class="bi bi-briefcase stat-icon text-primary"></i>
+                                <h2 class="fw-bold">${approvedDrives.length}</h2><small class="text-muted">Available
+                                    Drives</small>
+                            </div>
+                        </div>
+                    </div>
