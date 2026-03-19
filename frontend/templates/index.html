@@ -960,3 +960,20 @@
                 <div class="row g-2 mb-4">
                     <div class="col-md-4"><input type="text" class="form-control" placeholder="Search drives..."
                             v-model="driveSearch" @input="loadStudentDrives"></div>
+                    <div class="col-md-3"><select class="form-select" v-model="branchFilter"
+                            @change="loadStudentDrives">
+                            <option value="">All Branches</option>
+                            <option v-for="d in departments" :value="d">${d}</option>
+                        </select></div>
+                </div>
+                <div class="row g-3">
+                    <div v-for="d in approvedDrives" :key="d.id" class="col-md-4">
+                        <div class="card border-0 shadow-sm drive-card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="fw-bold">${d.drive_name}</h6><span
+                                        class="badge bg-success">${d.job_type||'Full-time'}</span>
+                                </div>
+                                <p class="text-muted small mb-1"><i class="bi bi-building me-1"></i>${d.company_name}
+                                </p>
+                                <p class="text-muted small mb-1"><i
