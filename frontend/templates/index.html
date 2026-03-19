@@ -1023,3 +1023,17 @@
                             <div class="col-md-4"><strong><i class="bi bi-briefcase me-1"></i>Job
                                     Title:</strong><br>${selectedDrive.job_title}</div>
                             <div class="col-md-4"><strong><i
+                                        class="bi bi-geo-alt me-1"></i>Location:</strong><br>${selectedDrive.location||'Remote'}
+                            </div>
+                            <div class="col-md-4"><strong><i
+                                        class="bi bi-cash me-1"></i>Salary/CTC:</strong><br>${selectedDrive.salary||'N/A'}
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4"><strong><i class="bi bi-mortarboard me-1"></i>Min
+                                    CGPA:</strong><br>${selectedDrive.min_cgpa||'None'}</div>
+                            <div class="col-md-4"><strong><i
+                                        class="bi bi-diagram-3 me-1"></i>Branch:</strong><br>${selectedDrive.eligibility_branch||'All'}
+                            </div>
+                            <div class="col-md-4"><strong><i
+                                        class="bi bi-calendar me-1"></i>Deadline:</strong><br>${selectedDrive.application_deadline?formatDate(selectedDrive.application_deadline):'Open'}
