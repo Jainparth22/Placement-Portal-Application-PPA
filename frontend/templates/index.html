@@ -1005,3 +1005,21 @@
             <!-- â•â•â• STUDENT APPLICATIONS â•â•â• -->
 
             <!-- STUDENT DRIVE DETAIL -->
+            <div v-if="currentPage==='student-drive-detail'&&selectedDrive" class="container py-4">
+                <button class="btn btn-outline-secondary mb-3" @click="navigate('student-drives')"><i
+                        class="bi bi-arrow-left me-1"></i>Back to Drives</button>
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <h4 class="fw-bold mb-1">${selectedDrive.drive_name}</h4>
+                                <p class="text-muted mb-0"><i
+                                        class="bi bi-building me-1"></i>${selectedDrive.company_name}</p>
+                            </div>
+                            <span class="badge bg-success fs-6">${selectedDrive.job_type||'Full-time'}</span>
+                        </div>
+                        <hr>
+                        <div class="row mb-3">
+                            <div class="col-md-4"><strong><i class="bi bi-briefcase me-1"></i>Job
+                                    Title:</strong><br>${selectedDrive.job_title}</div>
+                            <div class="col-md-4"><strong><i
