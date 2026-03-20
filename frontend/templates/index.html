@@ -1037,3 +1037,19 @@
                             </div>
                             <div class="col-md-4"><strong><i
                                         class="bi bi-calendar me-1"></i>Deadline:</strong><br>${selectedDrive.application_deadline?formatDate(selectedDrive.application_deadline):'Open'}
+                            </div>
+                        </div>
+                        <div v-if="selectedDrive.job_description" class="mb-3">
+                            <strong>Job Description:</strong>
+                            <p class="mt-1" style="white-space:pre-wrap;">${selectedDrive.job_description}</p>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-primary" @click="applyForDrive(selectedDrive.id)"><i
+                                    class="bi bi-send me-1"></i>Apply Now</button>
+                            <button class="btn btn-outline-warning" @click="checkATS(selectedDrive.id)"><i
+                                    class="bi bi-file-earmark-check me-1"></i>Check ATS Match</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
