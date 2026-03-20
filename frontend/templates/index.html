@@ -1074,3 +1074,11 @@
                                 <td><strong>${a.drive_name}</strong></td>
                                 <td>${a.company_name}</td>
                                 <td>${a.job_title}</td>
+                                <td>${formatDate(a.application_date)}</td>
+                                <td><span :class="statusBadge(a.status)">${a.status}</span></td>
+                                <td><button v-if="a.status==='applied'" class="btn btn-sm btn-outline-danger"
+                                        @click="withdrawApplication(a.id)">Withdraw</button></td>
+                            </tr>
+                            <tr v-if="!myApplications.length">
+                                <td colspan="7" class="text-center text-muted">No applications</td>
+                            </tr>
