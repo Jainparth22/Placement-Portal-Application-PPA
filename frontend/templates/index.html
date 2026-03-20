@@ -1058,3 +1058,19 @@
                 <div class="table-responsive">
                     <table class="table table-hover align-middle">
                         <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Drive</th>
+                                <th>Company</th>
+                                <th>Job</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="a in myApplications" :key="a.id">
+                                <td>${a.id}</td>
+                                <td><strong>${a.drive_name}</strong></td>
+                                <td>${a.company_name}</td>
+                                <td>${a.job_title}</td>
